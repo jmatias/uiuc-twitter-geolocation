@@ -15,4 +15,4 @@ class ReverseGeocode():
         for r in result_set:
             return r[0]
 
-        return None
+        raise ValueError("Could not find state for {0},{1}".format(location[0], location[1]), location)
