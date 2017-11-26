@@ -15,8 +15,8 @@
 /Datasets/user_states_test.pickle
 /Datasets/eisenstein.data
 /Datasets/eisenstein_locations.csv
-/Datasets/user_states_train.pickle
-/Datasets/__pycache__
+**pickle
+__pycache__
 
 
 

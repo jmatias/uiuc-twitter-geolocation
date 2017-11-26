@@ -2,7 +2,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 import numpy as np
-import os.path
 import scipy.spatial.distance as sd
 from skip_thoughts import configuration
 from skip_thoughts import encoder_manager
@@ -32,20 +31,12 @@ encoder.load_model(configuration.model_config(),
                    embedding_matrix_file=EMBEDDING_MATRIX_FILE,
                    checkpoint_path=CHECKPOINT_PATH)
 
-data = []
-# with open(os.path.join(MR_DATA_DIR, 'rt-polarity.neg'), 'rb') as f:
-#   data.extend([line.decode('latin-1').strip() for line in f])
-# with open(os.path.join(MR_DATA_DIR, 'rt-polarity.pos'), 'rb') as f:
-#   data.extend([line.decode('latin-1').strip() for line in f])
-
-# data.append("incredibly boring movie")
-
-
 regex_pattern = "(-?\d+\.\d+)\s+?(-?\d+\.\d+)\t(.+)\|{3}"
 data = []
 with open(TWEETS_DEV_DATA, 'rb') as f:
     data.extend(
-        [re.sub("((@\w+))", "", l).strip() for line in f for m in [re.search(regex_pattern, line.decode("utf-8").strip())]
+        [re.sub("((@\w+))", "", l).strip() for line in f for m in
+         [re.search(regex_pattern, line.decode("utf-8").strip())]
          if m for l in m.group(3).split("|||") if re.sub("((@\w+))", "", l).strip()])
 
 data[0] = "I am so tired. I could sleep for days."
@@ -67,7 +58,6 @@ def get_nn(ind, num=10):
 
 current_time = time.time()
 duration = current_time - start_time
-
 
 for i in range(0, 35000, 250):
     get_nn(i)

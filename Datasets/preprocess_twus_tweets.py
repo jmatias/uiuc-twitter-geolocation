@@ -1,21 +1,30 @@
 import re
 import pickle
 
-TWEETS_TEST_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.test"
-TWEETS_DEV_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.dev"
-TWEETS_TRAIN_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.train"
+TWEETS_TEST_DATA = "na/user_info.test"
+TWEETS_DEV_DATA = "na/user_info.dev"
+TWEETS_TRAIN_DATA = "na/user_info.train"
 
-regex_pattern = "(-?\d+\.\d+)\s+?(-?\d+\.\d+)\t(.+)"
-data = []
-with open(TWEETS_DEV_DATA, 'rb') as f:
-    data.extend([m.group(3) for line in f for m in [re.search(regex_pattern, line.decode("utf-8"))] if m])
 
-with open('Datasets/user_states_train.pickle', 'rb') as handle:
-    states_train = pickle.load(handle)
+def extract_twitter_user_tweets(filepath, pickle_filename):
+    regex_pattern = "(.+?)\t(-?\d+\.\d+)\t(-?\d+\.\d+)\t(.+)"
+    data = []
+    with open(filepath, 'rb') as f:
+        data.extend(
+            [(m.group(1), m.group(4)) for line in f for m in [re.search(regex_pattern, line.decode("utf-8"))] if m])
 
-with open('Datasets/user_states_test.pickle', 'rb') as handle:
-    states_test = pickle.load(handle)
+    tweets = {}
+    for row in data:
+        user_tweets = [tweet.strip() for tweet in row[1].split("|||")]
+        tweets[row[0]] = user_tweets
 
-with open('Datasets/user_states_test.pickle', 'rb') as handle:
-    states_dev = pickle.load(handle)
+    with open(pickle_filename + '.pickle', 'wb') as handle:
+        pickle.dump(tweets, handle)
 
+    return tweets
+
+
+extract_twitter_user_tweets(TWEETS_DEV_DATA, "user_tweets_dev")
+extract_twitter_user_tweets(TWEETS_TEST_DATA, "user_tweets_test")
+extract_twitter_user_tweets(TWEETS_TRAIN_DATA, "user_tweets_train")
+print("Hello World!")

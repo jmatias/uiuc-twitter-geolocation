@@ -3,18 +3,18 @@ import pickle
 
 import Datasets.reverse_geocode as rg
 
-TWEETS_TEST_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.test"
-TWEETS_DEV_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.dev"
-TWEETS_TRAIN_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.train"
+TWEETS_TEST_DATA = "na/user_info.test"
+TWEETS_DEV_DATA = "na/user_info.dev"
+TWEETS_TRAIN_DATA = "na/user_info.train"
 
 
 def extract_twitter_user_states(filepath, pickle_filename):
     regex_pattern = "([^\t]+)\t([-]?\d+\.\d+)\t([-]?\d+\.\d+)"
     data = []
-    with open(filepath, 'r') as f:
+    with open(filepath, 'r') as file:
         data.extend(
-            [[m.group(1), m.group(2), m.group(3)] for line in f for m in
-             [re.search(regex_pattern, line.strip())] if m])
+            [[match.group(1), match.group(2), match.group(3)] for line in file for match in
+             [re.search(regex_pattern, line.strip())] if match])
 
     states = {}
     geocoder = rg.ReverseGeocode()
