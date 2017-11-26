@@ -11,19 +11,18 @@ import re
 
 start_time = time.time()
 
-TWEETS_TEST_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.test"
-TWEETS_DEV_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.dev"
-TWEETS_TRAIN_DATA = "/home/javier/project/TwitterGeolocation/Datasets/na/user_info.train"
+'''
+Encode tweets as thought vectors and then find its ten closest neighbors.
+'''
+
+TWEETS_TEST_DATA = "/Datasets/na/user_info.test"
+TWEETS_DEV_DATA = "/Datasets/na/user_info.dev"
+TWEETS_TRAIN_DATA = "/Datasets/na/user_info.train"
 
 DATA_DIR = "/home/javier/harddrive/skip_thoughts/pretrained/skip_thoughts_uni_2017_02_02/"
 VOCAB_FILE = DATA_DIR + "vocab.txt"
 EMBEDDING_MATRIX_FILE = DATA_DIR + "embeddings.npy"
 CHECKPOINT_PATH = DATA_DIR + "model.ckpt-501424"
-# The following directory should contain files rt-polarity.neg and
-# rt-polarity.pos.
-MR_DATA_DIR = "/home/javier/harddrive/skip_thoughts/rt-polaritydata"
-
-TWEETS_DATA_DIR = ""
 
 encoder = encoder_manager.EncoderManager()
 encoder.load_model(configuration.model_config(),

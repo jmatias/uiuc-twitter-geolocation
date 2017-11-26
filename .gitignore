@@ -1,21 +1,21 @@
 
-/Datasets/AmazonDriveDownload.zip
-/Datasets/na/
-/Datasets/cmu/
-/Datasets/world/
-/Datasets/snap/
-/Datasets/user_info.dev
-/Datasets/user_info.dev.gz
-/Datasets/text8.zip
-/Datasets/GeoText.2010-10-12/
-/Datasets/user_states_dev.pickle
-/Datasets/eisenstein.data.gz
-/Datasets/rt-polaritydata.tar.gz
-/Datasets/GeoText.2010-10-12.tgz
-/Datasets/user_states_test.pickle
-/Datasets/eisenstein.data
-/Datasets/eisenstein_locations.csv
-**pickle
+/data/AmazonDriveDownload.zip
+/data/na/
+/data/cmu/
+/data/world/
+/data/snap/
+/data/user_info.dev
+/data/user_info.dev.gz
+/data/text8.zip
+/data/GeoText.2010-10-12/
+/data/user_states_dev.pickle
+/data/eisenstein.data.gz
+/data/rt-polaritydata.tar.gz
+/data/GeoText.2010-10-12.tgz
+/data/user_states_test.pickle
+/data/eisenstein.data
+/data/eisenstein_locations.csv
+/data/*pickle
 __pycache__
 
 

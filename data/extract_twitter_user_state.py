@@ -1,7 +1,7 @@
 import re
 import pickle
 
-import Datasets.reverse_geocode as rg
+import data.reverse_geocode as rg
 
 TWEETS_TEST_DATA = "na/user_info.test"
 TWEETS_DEV_DATA = "na/user_info.dev"
