@@ -6,6 +6,10 @@ class ReverseGeocode():
         self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
 
     def reverse_geocode_state(self, location):
+        """Find the corresponding US state of a given pair of coordinates.
+        :param location: A tuple containing the (latitude, longitude)
+        :return: The corresponding state. Example: 'FL'
+        """
         point = "'POINT({1} {0})'".format(location[0], location[1])
 
         result_set = self._db.execute(
