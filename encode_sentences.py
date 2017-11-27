@@ -15,9 +15,9 @@ start_time = time.time()
 Encode tweets as thought vectors and then find its ten closest neighbors.
 '''
 
-TWEETS_TEST_DATA = "/Datasets/na/user_info.test"
-TWEETS_DEV_DATA = "/Datasets/na/user_info.dev"
-TWEETS_TRAIN_DATA = "/Datasets/na/user_info.train"
+TWEETS_TEST_DATA = "data/na/user_info.test"
+TWEETS_DEV_DATA = "data/na/user_info.dev"
+TWEETS_TRAIN_DATA = "data/na/user_info.train"
 
 DATA_DIR = "/home/javier/harddrive/skip_thoughts/pretrained/skip_thoughts_uni_2017_02_02/"
 VOCAB_FILE = DATA_DIR + "vocab.txt"
@@ -38,8 +38,8 @@ with open(TWEETS_DEV_DATA, 'rb') as f:
          [re.search(regex_pattern, line.decode("utf-8").strip())]
          if m for l in m.group(3).split("|||") if re.sub("((@\w+))", "", l).strip()])
 
-data[0] = "I am so tired. I could sleep for days."
-encodings = encoder.encode(data[0:350000])
+data[0] = "i am so tired. i could sleep for days."
+encodings = encoder.encode(data[0:35000])
 
 
 def get_nn(ind, num=10):
