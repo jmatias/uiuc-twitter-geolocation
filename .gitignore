@@ -64,3 +64,5 @@ crashlytics-build.properties
 fabric.properties
 /data/pretrained/
 /data/.~lock.state_table.csv#
+/data/user_vector_means.dev
+/data/user_vector_means.train

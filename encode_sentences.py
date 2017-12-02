@@ -8,7 +8,10 @@ from skip_thoughts import encoder_manager
 import time
 import data.twitter_user as twuser
 
+
+
 start_time = time.time()
+
 
 '''
 Encode tweets as thought vectors and then find its ten closest neighbors.
@@ -29,10 +32,11 @@ encoder.load_model(configuration.model_config(),
                    embedding_matrix_file=EMBEDDING_MATRIX_FILE,
                    checkpoint_path=CHECKPOINT_PATH)
 
-twitter_users = twuser.load_twitter_users(encoder, dataset='dev')
+twitter_users = twuser.load_twitter_users(encoder, dataset='train')
 tweet_list = twuser.get_raw_tweet_list(twitter_users)
+vector_list = twuser.get_mean_thought_vectors(twitter_users)
 
-encodings = encoder.encode(tweet_list[0:35000])
+encodings = encoder.encode(tweet_list[0:35000],use_norm=False)
 
 
 
@@ -56,22 +60,5 @@ duration = current_time - start_time
 for i in range(0, 35000, 250):
     get_nn(i)
 
-get_nn(0)
-get_nn(5)
-get_nn(6)
-get_nn(10)
-get_nn(500)
-get_nn(600)
-get_nn(700)
-get_nn(800)
-get_nn(900)
-get_nn(1000)
-get_nn(1100)
-get_nn(1300)
-get_nn(1500)
-get_nn(15000)
-get_nn(16000)
-get_nn(17000)
-get_nn(18000)
 
 print("Duration {0:.3f} secs".format(duration))

@@ -31,16 +31,29 @@ class ReverseGeocode():
     def get_state_region_name(self, state):
         if state is None:
             raise ValueError('state may not be None.')
-        return state_table[state_table["abbreviation"] == state]['census_region_name'].values[0]
+
+        try:
+            return state_table[state_table["abbreviation"] == state]['census_region_name'].values[0]
+        except Exception as e:
+            print(e)
+            print(state)
 
     def get_state_region(self, state):
         if state is None:
             raise ValueError('state may not be None.')
 
-        return state_table[state_table["abbreviation"] == state]['census_region'].values[0]
+        try:
+            return state_table[state_table["abbreviation"] == state]['census_region'].values[0]
+        except Exception as e:
+            print(e)
+            print(state)
 
     def get_state_index(self, state):
         if state is None:
             raise ValueError('state may not be None.')
 
-        return state_table[state_table["abbreviation"] == state]['id'].values[0]
+        try:
+            return state_table[state_table["abbreviation"] == state]['id'].values[0]
+        except Exception as e:
+            print(e)
+            print(state)

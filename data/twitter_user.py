@@ -12,7 +12,6 @@ class TwitterUser:
         self._location_longitude = None
         self._tweets = []
         self._state = None
-        self._region = None
         self._username = None
         self._encoder = encoder
         self._geocoder = geocoder
@@ -26,12 +25,18 @@ class TwitterUser:
         self._state = state
 
     @property
+    def us_state_id(self):
+        if self._state is None:
+            raise ValueError("State is None")
+        return self._geocoder.get_state_index(self._state)
+
+    @property
     def us_region(self):
-        return self._geocoder.get_state_region(self.us_state)
+        return self._geocoder.get_state_region(self._state)
 
     @property
     def us_region_name(self):
-        return self._geocoder.get_state_region_name(self.us_state)
+        return self._geocoder.get_state_region_name(self._state)
 
     @property
     def username(self):
@@ -54,10 +59,14 @@ class TwitterUser:
         return self._encoder
 
     def to_thought_vectors(self):
-        return self.encoder.encode(self.tweets)
+        return self.encoder.encode(self.tweets, use_norm=False)
 
     def thought_vector_mean(self):
-        return np.mean(self.to_thought_vectors(), axis=0)
+        try:
+            return np.mean(self.to_thought_vectors(), axis=0)
+        except ValueError as e:
+            print("WTF!")
+            print(e)
 
 
 def load_twitter_users(encoder: em.EncoderManager, dataset='dev') -> List[TwitterUser]:
@@ -87,7 +96,8 @@ def load_twitter_users(encoder: em.EncoderManager, dataset='dev') -> List[Twitte
         user.us_state = state
         user.username = username
         user.tweets = tweets_dev[username]
-        users.append(user)
+        if state:
+            users.append(user)
 
     return users
 
@@ -97,3 +107,16 @@ def get_raw_tweet_list(twitter_users: List[TwitterUser]):
     for user in twitter_users:
         tweet_list += user.tweets
     return tweet_list
+
+
+def get_mean_thought_vectors(twitter_users: List[TwitterUser]):
+    vectors = np.zeros(shape=(len(twitter_users), 2402))
+    vector_users = {}
+    i = 0
+    for user in twitter_users:
+        vectors[i] = np.hstack((user.thought_vector_mean(), np.array([user.us_region, user.us_state_id])))
+        vector_users[user.username] = vectors[i]
+        i += 1
+    with open("data/user_vector_means.train", 'wb') as handle:
+        pickle.dump(vector_users, handle)
+    return vectors
