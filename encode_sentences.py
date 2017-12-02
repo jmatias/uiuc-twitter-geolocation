@@ -6,8 +6,7 @@ import scipy.spatial.distance as sd
 from skip_thoughts import configuration
 from skip_thoughts import encoder_manager
 import time
-
-import re
+import data.twitter_user as twuser
 
 start_time = time.time()
 
@@ -19,7 +18,7 @@ TWEETS_TEST_DATA = "data/na/user_info.test"
 TWEETS_DEV_DATA = "data/na/user_info.dev"
 TWEETS_TRAIN_DATA = "data/na/user_info.train"
 
-DATA_DIR = "/home/javier/harddrive/skip_thoughts/pretrained/skip_thoughts_uni_2017_02_02/"
+DATA_DIR = "data/pretrained/skip_thoughts_uni_2017_02_02/"
 VOCAB_FILE = DATA_DIR + "vocab.txt"
 EMBEDDING_MATRIX_FILE = DATA_DIR + "embeddings.npy"
 CHECKPOINT_PATH = DATA_DIR + "model.ckpt-501424"
@@ -30,16 +29,12 @@ encoder.load_model(configuration.model_config(),
                    embedding_matrix_file=EMBEDDING_MATRIX_FILE,
                    checkpoint_path=CHECKPOINT_PATH)
 
-regex_pattern = "(-?\d+\.\d+)\s+?(-?\d+\.\d+)\t(.+)\|{3}"
-data = []
-with open(TWEETS_DEV_DATA, 'rb') as f:
-    data.extend(
-        [re.sub("((@\w+))", "", l).strip() for line in f for m in
-         [re.search(regex_pattern, line.decode("utf-8").strip())]
-         if m for l in m.group(3).split("|||") if re.sub("((@\w+))", "", l).strip()])
+twitter_users = twuser.load_twitter_users(encoder, dataset='dev')
+tweet_list = twuser.get_raw_tweet_list(twitter_users)
 
-data[0] = "i am so tired. i could sleep for days."
-encodings = encoder.encode(data[0:35000])
+encodings = encoder.encode(tweet_list[0:35000])
+
+
 
 
 def get_nn(ind, num=10):
@@ -47,11 +42,11 @@ def get_nn(ind, num=10):
     scores = sd.cdist([encoding], encodings, "cosine")[0]
     sorted_ids = np.argsort(scores)
     print("Sentence:")
-    print("", data[ind])
+    print("", tweet_list[ind])
     print("\nNearest neighbors:")
     for i in range(1, num + 1):
         print(" %d. %s (%.3f)" %
-              (i, data[sorted_ids[i]], scores[sorted_ids[i]]))
+              (i, tweet_list[sorted_ids[i]], scores[sorted_ids[i]]))
     print("\n\n")
 
 

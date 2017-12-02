@@ -1,4 +1,11 @@
 import sqlalchemy
+import pandas as pd
+import os
+
+dirname = os.path.dirname(__file__)
+filename = os.path.join(dirname, 'state_table.csv')
+
+state_table = pd.read_csv(filename)
 
 
 class ReverseGeocode():
@@ -20,3 +27,20 @@ class ReverseGeocode():
             return r[0]
 
         raise ValueError("Could not find state for {0},{1}".format(location[0], location[1]), location)
+
+    def get_state_region_name(self, state):
+        if state is None:
+            raise ValueError('state may not be None.')
+        return state_table[state_table["abbreviation"] == state]['census_region_name'].values[0]
+
+    def get_state_region(self, state):
+        if state is None:
+            raise ValueError('state may not be None.')
+
+        return state_table[state_table["abbreviation"] == state]['census_region'].values[0]
+
+    def get_state_index(self, state):
+        if state is None:
+            raise ValueError('state may not be None.')
+
+        return state_table[state_table["abbreviation"] == state]['id'].values[0]

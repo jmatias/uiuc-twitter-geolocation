@@ -1,9 +1,11 @@
 import re
 import pickle
-
+import os
 import data.reverse_geocode as rg
 
-TWITTER_TEST_DATA = "na/user_info.test"
+dirname = os.path.dirname(__file__)
+
+TWITTER_TEST_DATA = os.path.join(dirname, 'na/user_info.test')
 TWITTER_DEV_DATA = "na/user_info.dev"
 TWITTER_TRAIN_DATA = "na/user_info.train"
 
@@ -44,8 +46,12 @@ def extract_twitter_user_tweets(filepath, pickle_filename):
 
     tweets = {}
     for row in data:
-        user_tweets = [tweet.strip() for tweet in row[1].split("|||")]
+        user_tweets = [re.sub("((@\w+))", "", tweet).strip() for tweet in row[1].split("|||")]
         tweets[row[0]] = user_tweets
+
+    for t in tweets:
+        if len(t.strip()) < 1:
+            raise ValueError("Empty tweet for user {0}".format(t))
 
     with open(pickle_filename, 'wb') as handle:
         pickle.dump(tweets, handle)
@@ -55,9 +61,9 @@ def extract_twitter_user_tweets(filepath, pickle_filename):
 
 if __name__ == '__main__':
     extract_twitter_user_tweets(TWITTER_DEV_DATA, TWEETS_DEV_DATA_FILE)
-    extract_twitter_user_tweets(TWITTER_TEST_DATA, TWEETS_TEST_DATA_FILE)
-    extract_twitter_user_tweets(TWITTER_TRAIN_DATA, TWEETS_TRAIN_DATA_FILE)
+    # extract_twitter_user_tweets(TWITTER_TEST_DATA, TWEETS_TEST_DATA_FILE)
+    # extract_twitter_user_tweets(TWITTER_TRAIN_DATA, TWEETS_TRAIN_DATA_FILE)
 
-    extract_twitter_user_states(TWITTER_DEV_DATA, STATES_DEV_DATA_FILE)
-    extract_twitter_user_states(TWITTER_TEST_DATA, STATES_TEST_DATA_FILE)
-    extract_twitter_user_states(TWITTER_TRAIN_DATA, STATES_TRAIN_DATA_FILE)
+    # extract_twitter_user_states(TWITTER_DEV_DATA, STATES_DEV_DATA_FILE)
+    # extract_twitter_user_states(TWITTER_TEST_DATA, STATES_TEST_DATA_FILE)
+    # extract_twitter_user_states(TWITTER_TRAIN_DATA, STATES_TRAIN_DATA_FILE)
