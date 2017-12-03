@@ -4,6 +4,7 @@ import data.reverse_geocode as rg
 from skip_thoughts import encoder_manager as em
 import pickle
 import numpy as np
+import time
 
 
 class TwitterUser:
@@ -113,10 +114,21 @@ def get_mean_thought_vectors(twitter_users: List[TwitterUser]):
     vectors = np.zeros(shape=(len(twitter_users), 2402))
     vector_users = {}
     i = 0
+
+    start_time = time.time()
     for user in twitter_users:
         vectors[i] = np.hstack((user.thought_vector_mean(), np.array([user.us_region, user.us_state_id])))
         vector_users[user.username] = vectors[i]
         i += 1
-    with open("data/user_vector_means.train", 'wb') as handle:
-        pickle.dump(vector_users, handle)
+
+        if (i % 10000 == 0):
+            with open("data/user_vector_means.train", 'wb') as handle:
+                pickle.dump(vector_users, handle)
+
+        if (i % 100 == 0):
+            end_time = time.time()
+
+            print("Iteration {0} - {1}".format(i,time.strftime("%H:%M:%S", time.gmtime(end_time-start_time))))
+            start_time = end_time
+
     return vectors
