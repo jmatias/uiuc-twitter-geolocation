@@ -8,11 +8,14 @@ from skip_thoughts import configuration
 from skip_thoughts import encoder_manager
 import data.twitter_user as twuser
 
-timesteps = 200
+timesteps = 100
 thought_vector_dimension = 2400
 num_classes = 5
-batch_size = 128
-epochs = 1000
+batch_size = 100
+batch_size = 250
+epochs = 10
+train_dataset_size = 5000
+val_dataset_size = 1000
 
 '''
 Encode tweets as thought vectors and then find its ten closest neighbors.
@@ -33,8 +36,7 @@ encoder.load_model(configuration.model_config(),
                    embedding_matrix_file=EMBEDDING_MATRIX_FILE,
                    checkpoint_path=CHECKPOINT_PATH)
 
-twitter_users = twuser.load_twitter_users(encoder, dataset='train')[0:20000]
-
+twitter_users = twuser.load_twitter_users(encoder, dataset='train')[0:train_dataset_size + val_dataset_size]
 
 model = Sequential()
 model.add(LSTM(500, dropout=0.5, recurrent_dropout=0.5, input_shape=(timesteps, 2400)))
@@ -47,8 +49,14 @@ model.compile(optimizer='adam',
 # one_hot_labels = keras.utils.to_categorical(train_y[:, 1], num_classes=num_classes)
 # one_hot_labels_val = keras.utils.to_categorical(val_y[:, 1], num_classes=num_classes)
 
-model.fit_generator(twuser.get_all_data_generator(twitter_users[0:10000]), steps_per_epoch=20,
-                    validation_data=twuser.get_all_data_generator(twitter_users[10000:15000]), validation_steps=10, epochs=10)
+model.fit_generator(
+    twuser.get_all_data_generator(twitter_users[0:train_dataset_size], batch_size=batch_size, timesteps=timesteps),
+    steps_per_epoch=train_dataset_size / batch_size,
+    validation_data=twuser.get_all_data_generator(
+        twitter_users[train_dataset_size:train_dataset_size + val_dataset_size], batch_size=batch_size,
+        timesteps=timesteps),
+    validation_steps=val_dataset_size / batch_size,
+    epochs=epochs)
 
 # lol = model.predict(data, verbose=True)
 print("Hello")

@@ -170,25 +170,34 @@ def get_all_data(twitter_users: List[TwitterUser]):
     return vectors_x, vectors_y
 
 
-def get_all_data_generator(twitter_users: List[TwitterUser]):
+def get_all_data_generator(twitter_users: List[TwitterUser],
+                           batch_size=100, timesteps=100):
+    lol = "Hello"
     while True:
+        for batch in range(math.ceil(len(twitter_users) / batch_size)):
+            tweets_to_encode = []
+            user_regions = []
+            vectors_x = np.zeros((batch_size, timesteps, 2400))
 
-        for batch in range(math.ceil(len(twitter_users) / 500)):
-            vectors_x = np.zeros((500, 200, 2400))
-            vectors_y = np.zeros((500, 5))
+            users = twitter_users[batch * batch_size: batch * batch_size + batch_size]
 
-            users = twitter_users[batch * 500: batch * 500 + 500]
-            i = 0
             for user in users:
-                encoded_tweets = user.encoder.encode(user.tweets[:200], use_norm=False)
-                j = 1
-                for tweet in encoded_tweets:
-                    vectors_x[i, -j] = tweet
-                    j += 1
+                if len(user.tweets) < 1:
+                    raise ValueError("User has zero tweets.", user.username)
+                tweets_to_encode += user.tweets
+                user_regions.append(user.us_region)
+            encoded_tweets = twitter_users[0].encoder.encode(tweets_to_encode, use_norm=False)
 
-                vectors_y[i] = keras.utils.to_categorical([user.us_region], num_classes=5)
+            i = 0
+            tweet_ptr = 0
+            for user in users:
+                user_encoded_tweets = encoded_tweets[tweet_ptr: tweet_ptr + len(user.tweets)]
+                total_timesteps = min(len(user.tweets), timesteps)
+                vectors_x[i, -total_timesteps:] = user_encoded_tweets[0:total_timesteps]
+                tweet_ptr += len(user.tweets)
                 i += 1
 
+            vectors_y = keras.utils.to_categorical(user_regions, num_classes=5)
             yield vectors_x, vectors_y
 
 
