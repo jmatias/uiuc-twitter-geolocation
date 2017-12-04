@@ -4,9 +4,9 @@ import data.reverse_geocode as rg
 from skip_thoughts import encoder_manager as em
 import pickle
 import numpy as np
-import time
 import keras
 import math
+import os
 
 
 class TwitterUser:
@@ -112,66 +112,8 @@ def get_raw_tweet_list(twitter_users: List[TwitterUser]):
     return tweet_list
 
 
-def get_mean_thought_vectors(twitter_users: List[TwitterUser]):
-    vectors = np.zeros(shape=(len(twitter_users), 2402))
-    vector_users = {}
-    i = 0
-
-    start_time = time.time()
-    for user in twitter_users:
-        vectors[i] = np.hstack((user.thought_vector_mean(), np.array([user.us_region, user.us_state_id])))
-        vector_users[user.username] = vectors[i]
-        i += 1
-
-        if (i % 10000 == 0):
-            with open("data/user_vector_means.train", 'wb') as handle:
-                pickle.dump(vector_users, handle)
-
-        if (i % 100 == 0):
-            end_time = time.time()
-
-            print("Iteration {0} - {1}".format(i, time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))))
-            start_time = end_time
-
-    return vectors
-
-
-def get_all_data(twitter_users: List[TwitterUser]):
-    vectors_x = np.zeros(shape=(len(twitter_users), 200, 2400))
-    vectors_y = np.zeros(shape=(len(twitter_users), 2))
-
-    i = 0
-    start_time = time.time()
-    for user in twitter_users:
-        j = 1
-        encoded_tweets = user.encoder.encode(user.tweets[:200], use_norm=False)
-
-        for tweet in encoded_tweets:
-            vectors_x[i, -j] = tweet
-            j += 1
-
-        vectors_y[i, 0] = user.us_state_id
-        vectors_y[i, 1] = user.us_region
-        i += 1
-
-        if (i % 100 == 0):
-            end_time = time.time()
-
-            print("Iteration {0} - {1}".format(i, time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))))
-            start_time = end_time
-
-    # with open("data/user_vectors_x.train", 'wb') as handle:
-    #     pickle.dump(vectors_x, handle)
-    #
-    # with open("data/user_vectors_y.train", 'wb') as handle:
-    #     pickle.dump(vectors_y, handle)
-
-
-    return vectors_x, vectors_y
-
-
 def get_all_data_generator(twitter_users: List[TwitterUser],
-                           batch_size=100, timesteps=100):
+                           batch_size=100, timesteps=100, dataset_type='train'):
     lol = "Hello"
     while True:
         for batch in range(math.ceil(len(twitter_users) / batch_size)):
@@ -186,7 +128,13 @@ def get_all_data_generator(twitter_users: List[TwitterUser],
                     raise ValueError("User has zero tweets.", user.username)
                 tweets_to_encode += user.tweets
                 user_regions.append(user.us_region)
-            encoded_tweets = twitter_users[0].encoder.encode(tweets_to_encode, use_norm=False)
+
+            encodings_cache_file = "data/encodings/encodings-{0}-{1}.npy".format(dataset_type, batch)
+            if (os.path.exists(encodings_cache_file)):
+                encoded_tweets = np.load(encodings_cache_file)
+            else:
+                encoded_tweets = twitter_users[0].encoder.encode(tweets_to_encode, use_norm=False)
+                np.save(encodings_cache_file, encoded_tweets)
 
             i = 0
             tweet_ptr = 0
@@ -199,13 +147,3 @@ def get_all_data_generator(twitter_users: List[TwitterUser],
 
             vectors_y = keras.utils.to_categorical(user_regions, num_classes=5)
             yield vectors_x, vectors_y
-
-
-def get_max_tweet_count(twitter_users: List[TwitterUser]):
-    max = 0
-
-    for user in twitter_users:
-        num_tweets = len(user.tweets)
-        if (num_tweets > max):
-            max = num_tweets
-    return max

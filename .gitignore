@@ -69,3 +69,7 @@ fabric.properties
 /lstm.py
 /imdb_lstm.py
 /generators.py
+/data/encodings-train*
+/data/encodings-val*
+/data/encodings/encodings-train*
+/data/encodings/encodings-val*

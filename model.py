@@ -2,20 +2,25 @@ from keras.models import Sequential
 from keras.layers import Dense, Dropout, LSTM
 from keras import regularizers
 import keras
-import numpy as np
-import pickle
 from skip_thoughts import configuration
 from skip_thoughts import encoder_manager
 import data.twitter_user as twuser
+import os, re
+
+def purge(dir, pattern):
+    for f in os.listdir(dir):
+        if re.search(pattern, f):
+            os.remove(os.path.join(dir, f))
+
+purge("data/","encodings-")
 
 timesteps = 100
 thought_vector_dimension = 2400
 num_classes = 5
 batch_size = 100
-batch_size = 250
-epochs = 10
-train_dataset_size = 5000
-val_dataset_size = 1000
+epochs = 100
+train_dataset_size = 15000
+val_dataset_size = 2000
 
 '''
 Encode tweets as thought vectors and then find its ten closest neighbors.
@@ -37,6 +42,7 @@ encoder.load_model(configuration.model_config(),
                    checkpoint_path=CHECKPOINT_PATH)
 
 twitter_users = twuser.load_twitter_users(encoder, dataset='train')[0:train_dataset_size + val_dataset_size]
+twitter_users.sort(key=lambda x: x.username)
 
 model = Sequential()
 model.add(LSTM(500, dropout=0.5, recurrent_dropout=0.5, input_shape=(timesteps, 2400)))
@@ -46,15 +52,13 @@ model.compile(optimizer='adam',
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
-# one_hot_labels = keras.utils.to_categorical(train_y[:, 1], num_classes=num_classes)
-# one_hot_labels_val = keras.utils.to_categorical(val_y[:, 1], num_classes=num_classes)
 
 model.fit_generator(
     twuser.get_all_data_generator(twitter_users[0:train_dataset_size], batch_size=batch_size, timesteps=timesteps),
     steps_per_epoch=train_dataset_size / batch_size,
     validation_data=twuser.get_all_data_generator(
         twitter_users[train_dataset_size:train_dataset_size + val_dataset_size], batch_size=batch_size,
-        timesteps=timesteps),
+        timesteps=timesteps, dataset_type='val'),
     validation_steps=val_dataset_size / batch_size,
     epochs=epochs)
 
