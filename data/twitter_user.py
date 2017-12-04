@@ -5,6 +5,8 @@ from skip_thoughts import encoder_manager as em
 import pickle
 import numpy as np
 import time
+import keras
+import math
 
 
 class TwitterUser:
@@ -142,7 +144,7 @@ def get_all_data(twitter_users: List[TwitterUser]):
     start_time = time.time()
     for user in twitter_users:
         j = 1
-        encoded_tweets = user.encoder.encode(user.tweets[:100], use_norm=False)
+        encoded_tweets = user.encoder.encode(user.tweets[:200], use_norm=False)
 
         for tweet in encoded_tweets:
             vectors_x[i, -j] = tweet
@@ -152,14 +154,11 @@ def get_all_data(twitter_users: List[TwitterUser]):
         vectors_y[i, 1] = user.us_region
         i += 1
 
-
-
         if (i % 100 == 0):
             end_time = time.time()
 
             print("Iteration {0} - {1}".format(i, time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))))
             start_time = end_time
-
 
     # with open("data/user_vectors_x.train", 'wb') as handle:
     #     pickle.dump(vectors_x, handle)
@@ -169,6 +168,28 @@ def get_all_data(twitter_users: List[TwitterUser]):
 
 
     return vectors_x, vectors_y
+
+
+def get_all_data_generator(twitter_users: List[TwitterUser]):
+    while True:
+
+        for batch in range(math.ceil(len(twitter_users) / 500)):
+            vectors_x = np.zeros((500, 200, 2400))
+            vectors_y = np.zeros((500, 5))
+
+            users = twitter_users[batch * 500: batch * 500 + 500]
+            i = 0
+            for user in users:
+                encoded_tweets = user.encoder.encode(user.tweets[:200], use_norm=False)
+                j = 1
+                for tweet in encoded_tweets:
+                    vectors_x[i, -j] = tweet
+                    j += 1
+
+                vectors_y[i] = keras.utils.to_categorical([user.us_region], num_classes=5)
+                i += 1
+
+            yield vectors_x, vectors_y
 
 
 def get_max_tweet_count(twitter_users: List[TwitterUser]):
