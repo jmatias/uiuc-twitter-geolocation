@@ -128,7 +128,54 @@ def get_mean_thought_vectors(twitter_users: List[TwitterUser]):
         if (i % 100 == 0):
             end_time = time.time()
 
-            print("Iteration {0} - {1}".format(i,time.strftime("%H:%M:%S", time.gmtime(end_time-start_time))))
+            print("Iteration {0} - {1}".format(i, time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))))
             start_time = end_time
 
     return vectors
+
+
+def get_all_data(twitter_users: List[TwitterUser]):
+    vectors_x = np.zeros(shape=(len(twitter_users), 200, 2400))
+    vectors_y = np.zeros(shape=(len(twitter_users), 2))
+
+    i = 0
+    start_time = time.time()
+    for user in twitter_users:
+        j = 1
+        encoded_tweets = user.encoder.encode(user.tweets[:100], use_norm=False)
+
+        for tweet in encoded_tweets:
+            vectors_x[i, -j] = tweet
+            j += 1
+
+        vectors_y[i, 0] = user.us_state_id
+        vectors_y[i, 1] = user.us_region
+        i += 1
+
+
+
+        if (i % 100 == 0):
+            end_time = time.time()
+
+            print("Iteration {0} - {1}".format(i, time.strftime("%H:%M:%S", time.gmtime(end_time - start_time))))
+            start_time = end_time
+
+
+    # with open("data/user_vectors_x.train", 'wb') as handle:
+    #     pickle.dump(vectors_x, handle)
+    #
+    # with open("data/user_vectors_y.train", 'wb') as handle:
+    #     pickle.dump(vectors_y, handle)
+
+
+    return vectors_x, vectors_y
+
+
+def get_max_tweet_count(twitter_users: List[TwitterUser]):
+    max = 0
+
+    for user in twitter_users:
+        num_tweets = len(user.tweets)
+        if (num_tweets > max):
+            max = num_tweets
+    return max

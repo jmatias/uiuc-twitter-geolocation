@@ -66,3 +66,6 @@ fabric.properties
 /data/.~lock.state_table.csv#
 /data/user_vector_means.dev
 /data/user_vector_means.train
+/lstm.py
+/imdb_lstm.py
+/generators.py

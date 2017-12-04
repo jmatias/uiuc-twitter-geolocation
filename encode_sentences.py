@@ -21,7 +21,7 @@ TWEETS_TEST_DATA = "data/na/user_info.test"
 TWEETS_DEV_DATA = "data/na/user_info.dev"
 TWEETS_TRAIN_DATA = "data/na/user_info.train"
 
-DATA_DIR = "data/pretrained/skip_thoughts_uni_2017_02_02/"
+DATA_DIR = "/home/javier/harddrive/skip_thoughts/pretrained/skip_thoughts_uni_2017_02_02/"
 VOCAB_FILE = DATA_DIR + "vocab.txt"
 EMBEDDING_MATRIX_FILE = DATA_DIR + "embeddings.npy"
 CHECKPOINT_PATH = DATA_DIR + "model.ckpt-501424"
@@ -33,8 +33,9 @@ encoder.load_model(configuration.model_config(),
                    checkpoint_path=CHECKPOINT_PATH)
 
 twitter_users = twuser.load_twitter_users(encoder, dataset='train')
+print(twuser.get_max_tweet_count(twitter_users))
 tweet_list = twuser.get_raw_tweet_list(twitter_users)
-vector_list = twuser.get_mean_thought_vectors(twitter_users)
+#vector_list = twuser.get_mean_thought_vectors(twitter_users)
 
 encodings = encoder.encode(tweet_list[0:35000],use_norm=False)
 
