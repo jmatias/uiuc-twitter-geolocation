@@ -8,19 +8,21 @@ import data.twitter_user as twuser
 import os, re
 
 def purge(dir, pattern):
-    for f in os.listdir(dir):
-        if re.search(pattern, f):
-            os.remove(os.path.join(dir, f))
+    if os.path.exists(dir):
+        for f in os.listdir(dir):
+            if re.search(pattern, f):
+                os.remove(os.path.join(dir, f))
 
-purge("data/","encodings-")
+
+purge("/home/javier/harddrive/encodings/","encodings-")
 
 timesteps = 100
 thought_vector_dimension = 2400
 num_classes = 5
-batch_size = 100
+batch_size = 200
 epochs = 100
-train_dataset_size = 15000
-val_dataset_size = 2000
+train_dataset_size = 40000
+val_dataset_size = 6000
 
 '''
 Encode tweets as thought vectors and then find its ten closest neighbors.
@@ -42,10 +44,9 @@ encoder.load_model(configuration.model_config(),
                    checkpoint_path=CHECKPOINT_PATH)
 
 twitter_users = twuser.load_twitter_users(encoder, dataset='train')[0:train_dataset_size + val_dataset_size]
-twitter_users.sort(key=lambda x: x.username)
 
 model = Sequential()
-model.add(LSTM(500, dropout=0.5, recurrent_dropout=0.5, input_shape=(timesteps, 2400)))
+model.add(LSTM(1500, dropout=0.5, recurrent_dropout=0.5, input_shape=(timesteps, 2400)))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(optimizer='adam',

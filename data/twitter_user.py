@@ -115,13 +115,15 @@ def get_raw_tweet_list(twitter_users: List[TwitterUser]):
 def get_all_data_generator(twitter_users: List[TwitterUser],
                            batch_size=100, timesteps=100, dataset_type='train'):
     lol = "Hello"
+    if not os.path.exists("/home/javier/harddrive/encodings/"):
+        os.makedirs("/home/javier/harddrive/encodings/")
     while True:
         for batch in range(math.ceil(len(twitter_users) / batch_size)):
             tweets_to_encode = []
             user_regions = []
-            vectors_x = np.zeros((batch_size, timesteps, 2400))
 
             users = twitter_users[batch * batch_size: batch * batch_size + batch_size]
+            vectors_x = np.zeros((len(users), timesteps, 2400))
 
             for user in users:
                 if len(user.tweets) < 1:
@@ -129,7 +131,7 @@ def get_all_data_generator(twitter_users: List[TwitterUser],
                 tweets_to_encode += user.tweets
                 user_regions.append(user.us_region)
 
-            encodings_cache_file = "data/encodings/encodings-{0}-{1}.npy".format(dataset_type, batch)
+            encodings_cache_file = "/home/javier/harddrive/encodings/encodings-{0}-{1}.npy".format(dataset_type, batch)
             if (os.path.exists(encodings_cache_file)):
                 encoded_tweets = np.load(encodings_cache_file)
             else:
