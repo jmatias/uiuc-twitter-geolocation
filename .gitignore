@@ -16,6 +16,7 @@
 /data/eisenstein.data
 /data/eisenstein_locations.csv
 /data/*pickle
+/data/first-gop-debate-twitter*
 __pycache__
 
 

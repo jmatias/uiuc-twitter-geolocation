@@ -10,7 +10,8 @@ state_table = pd.read_csv(filename)
 
 class ReverseGeocode():
     def __init__(self):
-        self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
+        #self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
+        self._db = None
 
     def reverse_geocode_state(self, location):
         """Find the corresponding US state of a given pair of coordinates.
