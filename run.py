@@ -21,10 +21,6 @@ epochs = 100
 Encode tweets as thought vectors and then find its ten closest neighbors.
 '''
 
-TWEETS_TEST_DATA = "data/na/user_info.test"
-TWEETS_DEV_DATA = "data/na/user_info.dev"
-TWEETS_TRAIN_DATA = "data/na/user_info.train"
-
 with open(os.path.join(dirname, "data/user_tweets_train3.pickle"), 'rb') as handle:
     train_data = pickle.load(handle)
 
@@ -35,9 +31,14 @@ tokenizer = Tokenizer(num_words=50000, lower=True, filters='!"#$%&()*+,-./:;<=>?
 tokenizer.fit_on_texts(train_df['tweets'].values)
 
 X_train = tokenizer.texts_to_sequences(train_df['tweets'].values)
-X_train = pad_sequences(X_train, maxlen=500, truncating='pre')
+X_train = pad_sequences(X_train, maxlen=timesteps, truncating='pre')
 Y_train = train_df['state'].values
 Y_train = keras.utils.to_categorical(Y_train, num_classes=53)
+
+
+def top_5_acc(y_true, y_pred):
+    return keras.metrics.top_k_categorical_accuracy(y_true, y_pred, k=5)
+
 
 model = Sequential()
 model.add(Embedding(50000, 150))
@@ -47,7 +48,7 @@ model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation='softmax'))
 model.compile(optimizer='adam',
               loss='categorical_crossentropy',
-              metrics=['accuracy'])
+              metrics=['accuracy', top_5_acc])
 
 now = time.time()
 log_dir = '/tmp/keras/{0}'.format(str(int(now)))

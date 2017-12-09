@@ -74,3 +74,5 @@ fabric.properties
 /data/encodings-val*
 /data/encodings/encodings-train*
 /data/encodings/encodings-val*
+.idea/TwitterGeolocation.iml
+.idea/misc.xml
