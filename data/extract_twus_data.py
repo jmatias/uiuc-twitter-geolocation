@@ -16,7 +16,7 @@ STATES_TRAIN_DATA_FILE = "user_states_train2.pickle"
 STATES_DEV_DATA_FILE = "user_states_dev2.pickle"
 STATES_TEST_DATA_FILE = "user_states_test2.pickle"
 
-TWEETS_TRAIN_DATA_FILE = "user_tweets_train2.pickle"
+TWEETS_TRAIN_DATA_FILE = "user_tweets_train3.pickle"
 TWEETS_DEV_DATA_FILE = "user_tweets_dev2.pickle"
 TWEETS_TEST_DATA_FILE = "user_tweets_test2.pickle"
 
@@ -46,15 +46,15 @@ def extract_twitter_data(filepath, pickle_filename):
             continue
         #stateStr = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
         tweets = data[i][3]
-        # words = word_tokenize(tweets)
-        # words = [ps.stem(w) for w in words]
-        # tweets = ' '.join(words)
+        words = word_tokenize(tweets)
+        words = [ps.stem(w) for w in words]
+        tweets = ' '.join(words)
 
 
         state = geocoder.get_state_index(stateStr)
         region = geocoder.get_state_region(stateStr)
         regionStr = geocoder.get_state_region_name(stateStr)
-        row = (tweets, data[i][3], state, region, stateStr, regionStr)
+        row = (username, tweets, state, region, stateStr, regionStr)
         parsed_data.append(row)
 
 
