@@ -1,7 +1,7 @@
 import argparse
-
 import os
 import pickle
+
 import pandas as pd
 
 if __name__ == '__main__':
@@ -15,9 +15,9 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    from model import Model
+    from models.twitter_geomodel import Model
 
-    geoModel = Model(epochs=args.epochs, batch_size=args.batch_size, time_steps=args.max_words,
+    geoModel = Model(num_outputs=53, epochs=args.epochs, batch_size=args.batch_size, time_steps=args.max_words,
                      train_datapath='data/user_tweets_train3.pickle', vocab_size=args.vocab_size,
                      use_tensorboard=args.tensorboard)
 

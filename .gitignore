@@ -80,3 +80,4 @@ fabric.properties
 /tokenizer.pickle
 /geomodel.h5
 /log_dir/
+/geomodel_state.h5
