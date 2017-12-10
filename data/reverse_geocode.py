@@ -10,7 +10,7 @@ state_table = pd.read_csv(filename)
 
 class ReverseGeocode():
     def __init__(self):
-        #self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
+        # self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
         self._db = None
 
     def reverse_geocode_state(self, location):
@@ -36,8 +36,7 @@ class ReverseGeocode():
         try:
             return state_table[state_table["abbreviation"] == state]['census_region_name'].values[0]
         except Exception as e:
-            print(e)
-            print(state)
+            pass
 
     def get_state_region(self, state):
         if state is None:
@@ -46,15 +45,12 @@ class ReverseGeocode():
         try:
             return state_table[state_table["abbreviation"] == state]['census_region'].values[0]
         except Exception as e:
-            print(e)
-            print(state)
+            pass
 
     def get_state_index(self, state):
         if state is None:
             raise ValueError('state may not be None.')
-
         try:
             return state_table[state_table["abbreviation"] == state]['id'].values[0]
         except Exception as e:
-            print(e)
-            print(state)
+            pass

@@ -4,7 +4,7 @@ import os
 import data.reverse_geocode as rg
 import io
 from nltk.stem import PorterStemmer
-from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import word_tokenize
 
 dirname = os.path.dirname(__file__)
 

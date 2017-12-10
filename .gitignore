@@ -78,3 +78,5 @@ fabric.properties
 .idea/misc.xml
 
 /tokenizer.pickle
+/geomodel.h5
+/log_dir/
