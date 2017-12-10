@@ -1,27 +1,19 @@
-import data.twitter_user as twuser
-from nltk.stem import PorterStemmer
-from nltk.tokenize import sent_tokenize, word_tokenize
+from model import Model
+import os
+import pickle
+import pandas as pd
 
-# twitter_users = twuser.load_twitter_users(None, dataset='train')
-# twitter_users.sort(key=lambda x: x.username)
+geoModel = Model(epochs=5, batch_size=192, time_steps=500, train_datapath='data/user_tweets_train3.pickle',
+                 use_tensorboard=True)
 
-# twitter_users2 = twuser.load_twitter_users(None, dataset='train').sort(key=lambda x: x.username)[0:10000]
+dirname = os.path.dirname(__file__)
 
-example_words = ["lol", "@javi_matias", "P_(", "jump", "jumping", "Jump", "loool"]
-sentence = "It is important to by very pythonly while you are ||| importing with python..... All pythoners have pythoned poorly at least once."
+with open(os.path.join(dirname, "data/user_tweets_train3.pickle"), 'rb') as handle:
+    train_data = pickle.load(handle)
 
+train_df = pd.DataFrame(train_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
+train_df = train_df.head(50000)
+X_train = train_df['tweets'].values
+Y_train = train_df['state'].values
 
-ps = PorterStemmer()
-
-for w in example_words:
-    print(ps.stem(w))
-
-print("*********************")
-
-words = word_tokenize(sentence)
-words = [ps.stem(w) for w in words]
-sentence = ' '.join(words)
-
-for w in words:
-    print(ps.stem(w))
-
+geoModel.train(X_train, Y_train)

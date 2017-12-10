@@ -76,3 +76,5 @@ fabric.properties
 /data/encodings/encodings-val*
 .idea/TwitterGeolocation.iml
 .idea/misc.xml
+
+/tokenizer.pickle
