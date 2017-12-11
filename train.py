@@ -1,5 +1,5 @@
 import argparse
-import data.extract_twus_data as twus
+from data import twus
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -19,5 +19,5 @@ if __name__ == '__main__':
                      use_tensorboard=args.tensorboard)
 
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
-    geoModel.train(x_test, y_test, x_dev, y_dev)
+    geoModel.train(x_train, y_train, x_dev, y_dev)
     # geoModel.save_model()

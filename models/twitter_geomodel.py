@@ -4,7 +4,9 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import keras
 import time
-
+import pickle
+from os import path
+from data import constants
 
 
 class Model:
@@ -39,9 +41,17 @@ class Model:
         return [tensorboard_callback]
 
     def train(self, x_train, y_train, x_dev, y_dev):
-        print("Building tweet Tokenizer using a {0} word vocabulary...".format(self._vocab_size))
-        tokenizer = Tokenizer(num_words=self._vocab_size, lower=True, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
-        tokenizer.fit_on_texts(x_train)
+        tokenizer_cachefile = path.join(constants.DATACACHE_DIR, "tokenizer_cache.pickle")
+        if path.exists(tokenizer_cachefile):
+            print("Loading cached tokenizer...")
+            with open(tokenizer_cachefile, 'rb') as handle:
+                tokenizer = pickle.load(handle)
+        else:
+            print("Building tweet Tokenizer using a {0} word vocabulary...".format(self._vocab_size))
+            tokenizer = Tokenizer(num_words=self._vocab_size, lower=True, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
+            tokenizer.fit_on_texts(x_train)
+            with open(tokenizer_cachefile, 'wb') as handle:
+                pickle.dump(tokenizer_cachefile, handle)
 
         print("Tokenizing tweets...")
         x_train = tokenizer.texts_to_sequences(x_train)

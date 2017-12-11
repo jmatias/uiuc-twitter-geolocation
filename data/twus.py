@@ -31,7 +31,7 @@ def load_state_data():
     x_test = test_df['tweets'].values
     y_test = test_df['state'].values
 
-    return (x_train, y_train, x_dev, y_dev, x_test, y_test)
+    return x_train, y_train, x_dev, y_dev, x_test, y_test
 
 
 def load_region_data():
@@ -46,7 +46,7 @@ def load_region_data():
     x_test = test_df['tweets'].values
     y_test = test_df['region'].values
 
-    return (x_train, y_train, x_dev, y_dev, x_test, y_test)
+    return x_train, y_train, x_dev, y_dev, x_test, y_test
 
 
 def _load_data():
@@ -71,7 +71,7 @@ def _load_data():
     dev_df = pd.DataFrame(dev_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
     test_df = pd.DataFrame(test_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
     train_df = pd.DataFrame(train_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
-    return (train_df, dev_df, test_df)
+    return train_df, dev_df, test_df
 
 
 def _extract_twitter_data(filepath, pickle_filename):
