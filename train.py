@@ -15,9 +15,8 @@ if __name__ == '__main__':
 
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
 
-    geoModel = Model(num_outputs=53, epochs=args.epochs, batch_size=args.batch_size, time_steps=args.max_words,
+    geoModel = Model(num_outputs=53, batch_size=args.batch_size, time_steps=args.max_words,
                      vocab_size=args.vocab_size, use_tensorboard=args.tensorboard)
 
-
-    geoModel.train(x_train, y_train, x_dev, y_dev)
+    geoModel.train(x_train, y_train, x_dev, y_dev, epochs=args.epochs)
     # geoModel.save_model()
