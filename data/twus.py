@@ -18,6 +18,10 @@ _TWITTER_PARSED_TEST_DATA = path.join(constants.DATACACHE_DIR, 'twus_test.pickle
 _TWITTER_PARSED_DEV_DATA = path.join(constants.DATACACHE_DIR, 'twus_dev.pickle')
 _TWITTER_PARSED_TRAIN_DATA = path.join(constants.DATACACHE_DIR, 'twus_train.pickle')
 
+__TWITTER_PARSED_TEST_DATA_DROPBOX = ""
+__TWITTER_PARSED_DEV_DATA_DROPBOX = ""
+__TWITTER_PARSED_TRAIN_DATA_DROPBOX = ""
+
 
 def load_state_data():
     train_df, dev_df, test_df = _load_data()

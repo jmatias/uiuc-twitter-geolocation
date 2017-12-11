@@ -10,9 +10,18 @@ from data import constants
 
 
 class Model:
-    def __init__(self, num_outputs, epochs, train_datapath, use_tensorboard, batch_size, time_steps, vocab_size):
+    def __init__(self, num_outputs, epochs, use_tensorboard, batch_size=32, time_steps=500,
+                 vocab_size=50000):
+        """
+
+        :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
+        :param epochs:
+        :param use_tensorboard: Track training progress using Tensorboard. Default: true.
+        :param batch_size: Default: 32
+        :param time_steps: Default: 500
+        :param vocab_size: Use the top N most frequent words. Default: 50,000
+        """
         self._epochs = epochs
-        self._train_datpath = train_datapath
         self._use_tensorboard = use_tensorboard
         self._batch_size = batch_size
         self._time_steps = time_steps
@@ -51,9 +60,13 @@ class Model:
             tokenizer = Tokenizer(num_words=self._vocab_size, lower=True, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
             tokenizer.fit_on_texts(x_train)
             with open(tokenizer_cachefile, 'wb') as handle:
-                pickle.dump(tokenizer_cachefile, handle)
+                pickle.dump(tokenizer, handle)
 
         print("Tokenizing tweets...")
+
+        x_dev = tokenizer.texts_to_sequences(x_dev)
+        x_dev = pad_sequences(x_dev, maxlen=self._time_steps, truncating='pre')
+
         x_train = tokenizer.texts_to_sequences(x_train)
         x_train = pad_sequences(x_train, maxlen=self._time_steps, truncating='pre')
 

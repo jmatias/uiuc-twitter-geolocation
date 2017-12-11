@@ -2,10 +2,10 @@ import sqlalchemy
 import pandas as pd
 import os
 
-dirname = os.path.dirname(__file__)
-filename = os.path.join(dirname, 'state_table.csv')
+_dirname = os.path.dirname(__file__)
+_filename = os.path.join(_dirname, 'state_table.csv')
 
-state_table = pd.read_csv(filename)
+state_table = pd.read_csv(_filename)
 
 
 class ReverseGeocode():
