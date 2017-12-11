@@ -1,22 +1,7 @@
 
-/data/AmazonDriveDownload.zip
-/data/na/
-/data/cmu/
-/data/world/
-/data/snap/
-/data/user_info.dev
-/data/user_info.dev.gz
-/data/text8.zip
-/data/GeoText.2010-10-12/
-/data/user_states_dev.pickle
-/data/eisenstein.data.gz
-/data/rt-polaritydata.tar.gz
-/data/GeoText.2010-10-12.tgz
-/data/user_states_test.pickle
-/data/eisenstein.data
-/data/eisenstein_locations.csv
-/data/*pickle
-/data/first-gop-debate-twitter*
+/datasets/AmazonDriveDownload.zip
+/datasets/twus/
+/data_cache/*pickle
 __pycache__
 
 
@@ -65,15 +50,6 @@ crashlytics-build.properties
 fabric.properties
 /data/pretrained/
 /data/.~lock.state_table.csv#
-/data/user_vector_means.dev
-/data/user_vector_means.train
-/lstm.py
-/imdb_lstm.py
-/generators.py
-/data/encodings-train*
-/data/encodings-val*
-/data/encodings/encodings-train*
-/data/encodings/encodings-val*
 .idea/TwitterGeolocation.iml
 .idea/misc.xml
 
@@ -81,3 +57,5 @@ fabric.properties
 /geomodel.h5
 /log_dir/
 /geomodel_state.h5
+/datasets/
+/.data_cache/

@@ -1,33 +1,83 @@
+import pandas as pd
 import re
 import pickle
-import os
+from os import path, makedirs
 import data.reverse_geocode as rg
+import data.constants as constants
 import io
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 
-dirname = os.path.dirname(__file__)
+_dirname = path.dirname(path.abspath(__file__))
 
-TWITTER_TEST_DATA = os.path.join(dirname, 'na/user_info.test')
-TWITTER_DEV_DATA = "na/user_info.dev"
-TWITTER_TRAIN_DATA = "na/user_info.train"
+_TWITTER_TEST_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.test')
+_TWITTER_DEV_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.dev')
+_TWITTER_TRAIN_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.train')
 
-STATES_TRAIN_DATA_FILE = "user_states_train2.pickle"
-STATES_DEV_DATA_FILE = "user_states_dev2.pickle"
-STATES_TEST_DATA_FILE = "user_states_test2.pickle"
-
-TWEETS_TRAIN_DATA_FILE = "user_tweets_train3.pickle"
-TWEETS_DEV_DATA_FILE = "user_tweets_dev2.pickle"
-TWEETS_TEST_DATA_FILE = "user_tweets_test2.pickle"
+_TWITTER_PARSED_TEST_DATA = path.join(constants.DATACACHE_DIR, 'twus_test.pickle')
+_TWITTER_PARSED_DEV_DATA = path.join(constants.DATACACHE_DIR, 'twus_dev.pickle')
+_TWITTER_PARSED_TRAIN_DATA = path.join(constants.DATACACHE_DIR, 'twus_train.pickle')
 
 
-def extract_twitter_data(filepath, pickle_filename):
+def load_state_data():
+    train_df, dev_df, test_df = _load_data()
 
-    with open(os.path.join(dirname, "user_states_train.pickle"), 'rb') as handle:
-        states_dev = pickle.load(handle)
+    x_train = train_df['tweets'].values
+    y_train = train_df['state'].values
+
+    x_dev = dev_df['tweets'].values
+    y_dev = dev_df['state'].values
+
+    x_test = test_df['tweets'].values
+    y_test = test_df['state'].values
+
+    return (x_train, y_train, x_dev, y_dev, x_test, y_test)
+
+
+def load_region_data():
+    train_df, dev_df, test_df = _load_data()
+
+    x_train = train_df['tweets'].values
+    y_train = train_df['region'].values
+
+    x_dev = dev_df['tweets'].values
+    y_dev = dev_df['region'].values
+
+    x_test = test_df['tweets'].values
+    y_test = test_df['region'].values
+
+    return (x_train, y_train, x_dev, y_dev, x_test, y_test)
+
+
+def _load_data():
+    if not path.exists(_TWITTER_PARSED_DEV_DATA):
+        _extract_twitter_data(_TWITTER_DEV_DATA, _TWITTER_PARSED_DEV_DATA)
+
+    if not path.exists(_TWITTER_PARSED_TEST_DATA):
+        _extract_twitter_data(_TWITTER_TEST_DATA, _TWITTER_PARSED_TEST_DATA)
+
+    if not path.exists(_TWITTER_PARSED_TRAIN_DATA):
+        _extract_twitter_data(_TWITTER_TRAIN_DATA, _TWITTER_PARSED_TRAIN_DATA)
+
+    with open(_TWITTER_PARSED_DEV_DATA, 'rb') as handle:
+        dev_data = pickle.load(handle)
+
+    with open(_TWITTER_PARSED_TEST_DATA, 'rb') as handle:
+        test_data = pickle.load(handle)
+
+    with open(_TWITTER_PARSED_TRAIN_DATA, 'rb') as handle:
+        train_data = pickle.load(handle)
+
+    dev_df = pd.DataFrame(dev_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
+    test_df = pd.DataFrame(test_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
+    train_df = pd.DataFrame(train_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
+    return (train_df, dev_df, test_df)
+
+
+def _extract_twitter_data(filepath, pickle_filename):
+    print("Parsing data from {0} ...".format(filepath))
 
     ps = PorterStemmer()
-
 
     regex_pattern = "([^\t]+)\t([-]?\d+\.\d+)\t([-]?\d+\.\d+)\t(.+)"
     data = []
@@ -38,18 +88,21 @@ def extract_twitter_data(filepath, pickle_filename):
 
     parsed_data = []
     geocoder = rg.ReverseGeocode()
-
+    total_lines = len(data)
+    percent_pt = total_lines // 1000
     for i in range(0, len(data)):
+        if (i % percent_pt == 0):
+            print("\r{0}% complete...".format(i / percent_pt / 10), end='')
+
         username = data[i][0]
-        stateStr = states_dev[username]
+        stateStr = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
         if not stateStr:
             continue
-        #stateStr = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
+
         tweets = data[i][3]
         words = word_tokenize(tweets)
         words = [ps.stem(w) for w in words]
         tweets = ' '.join(words)
-
 
         state = geocoder.get_state_index(stateStr)
         region = geocoder.get_state_region(stateStr)
@@ -57,11 +110,15 @@ def extract_twitter_data(filepath, pickle_filename):
         row = (username, tweets, state, region, stateStr, regionStr)
         parsed_data.append(row)
 
+    if not path.exists(path.dirname(path.abspath(pickle_filename))):
+        makedirs(path.dirname(path.abspath(pickle_filename)))
 
     with open(pickle_filename, 'wb') as handle:
         pickle.dump(parsed_data, handle)
-
+    print("\r100% complete...")
 
 
 if __name__ == '__main__':
-    extract_twitter_data(TWITTER_TRAIN_DATA, TWEETS_TRAIN_DATA_FILE)
+    _extract_twitter_data(_TWITTER_DEV_DATA, _TWITTER_PARSED_DEV_DATA)
+    _extract_twitter_data(_TWITTER_TEST_DATA, _TWITTER_PARSED_TEST_DATA)
+    _extract_twitter_data(_TWITTER_TRAIN_DATA, _TWITTER_PARSED_TRAIN_DATA)

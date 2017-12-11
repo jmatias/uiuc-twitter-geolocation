@@ -4,11 +4,7 @@ from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
 import keras
 import time
-import pickle
-from os import path
 
-_working_dir = path.dirname(__file__)
-_data_dir = path.join(_working_dir, "../data/")
 
 
 class Model:
@@ -42,37 +38,21 @@ class Model:
                                                            write_images=True)
         return [tensorboard_callback]
 
-    def train(self, x_train, y_train):
-
+    def train(self, x_train, y_train, x_dev, y_dev):
         print("Building tweet Tokenizer using a {0} word vocabulary...".format(self._vocab_size))
-
-        tokenizer_cache = path.join(_data_dir, 'tokenizer.pickle')
-        if path.exists(tokenizer_cache):
-            with open(tokenizer_cache, 'rb') as handle:
-                tokenizer = pickle.load(handle)
-        else:
-            tokenizer = Tokenizer(num_words=self._vocab_size, lower=True, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
-            tokenizer.fit_on_texts(x_train)
-            with open(tokenizer_cache, 'wb') as handle:
-                pickle.dump(tokenizer, handle)
+        tokenizer = Tokenizer(num_words=self._vocab_size, lower=True, filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
+        tokenizer.fit_on_texts(x_train)
 
         print("Tokenizing tweets...")
-        tokenized_tweets_cache = path.join(_data_dir, 'tokenized_train_tweets.pickle')
-
-        if path.exists(tokenized_tweets_cache):
-            with open(tokenized_tweets_cache, 'rb') as handle:
-                x_train = pickle.load(handle)
-        else:
-            x_train = tokenizer.texts_to_sequences(x_train)
-            x_train = pad_sequences(x_train, maxlen=self._time_steps, truncating='pre')
-            with open(tokenized_tweets_cache, 'wb') as handle:
-                pickle.dump(x_train, handle)
+        x_train = tokenizer.texts_to_sequences(x_train)
+        x_train = pad_sequences(x_train, maxlen=self._time_steps, truncating='pre')
 
         y_train = keras.utils.to_categorical(y_train, num_classes=self._num_outputs)
+        y_dev = keras.utils.to_categorical(y_dev, num_classes=self._num_outputs)
 
         print("Training model...")
         history = self._model.fit(x_train, y_train, epochs=self._epochs, batch_size=self._batch_size,
-                                  validation_split=0.025, callbacks=self._generate_callbacks())
+                                  validation_data=(x_dev, y_dev), callbacks=self._generate_callbacks())
         return history
 
     def predict(self):
@@ -81,5 +61,5 @@ class Model:
     def load_saved_model(self):
         pass
 
-    def save_model(self):
-        self._model.save('geomodel_state.h5')
+    def save_model(self, filename):
+        self._model.save(filename)

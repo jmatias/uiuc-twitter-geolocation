@@ -1,8 +1,5 @@
 import argparse
-import os
-import pickle
-
-import pandas as pd
+import data.extract_twus_data as twus
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -21,15 +18,6 @@ if __name__ == '__main__':
                      train_datapath='data/user_tweets_train3.pickle', vocab_size=args.vocab_size,
                      use_tensorboard=args.tensorboard)
 
-    dirname = os.path.dirname(__file__)
-
-    with open(os.path.join(dirname, "data/user_tweets_train3.pickle"), 'rb') as handle:
-        train_data = pickle.load(handle)
-
-    train_df = pd.DataFrame(train_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
-    X_train = train_df['tweets'].values
-    Y_train = train_df['state'].values
-    del train_df
-
-    geoModel.train(X_train, Y_train)
-    geoModel.save_model()
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    geoModel.train(x_test, y_test, x_dev, y_dev)
+    # geoModel.save_model()

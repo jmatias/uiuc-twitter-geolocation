@@ -10,7 +10,7 @@ state_table = pd.read_csv(filename)
 
 class ReverseGeocode():
     def __init__(self):
-        # self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
+
         self._db = None
 
     def reverse_geocode_state(self, location):
@@ -18,6 +18,10 @@ class ReverseGeocode():
         :param location: A tuple containing the (latitude, longitude)
         :return: The corresponding state. Example: 'FL'
         """
+
+        if self._db is None:
+            self._db = sqlalchemy.create_engine("postgresql://postgres:admin@localhost/geo")
+
         point = "'POINT({1} {0})'".format(location[0], location[1])
 
         result_set = self._db.execute(
