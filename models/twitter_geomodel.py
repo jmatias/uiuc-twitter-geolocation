@@ -20,13 +20,11 @@ class Model:
         """
 
         :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
-        :param epochs:
         :param use_tensorboard: Track training progress using Tensorboard. Default: true.
         :param batch_size: Default: 32
         :param time_steps: Default: 500
         :param vocab_size: Use the top N most frequent words. Default: 50,000
         """
-        self._epochs = None
         self._use_tensorboard = use_tensorboard
         self._batch_size = batch_size
         self._time_steps = time_steps
@@ -44,6 +42,40 @@ class Model:
         self._model.compile(optimizer='adam',
                             loss='categorical_crossentropy',
                             metrics=['accuracy', top_5_acc])
+
+    def train(self, x_train, y_train, x_dev, y_dev, epochs=7):
+
+        self._create_tokenizer(x_train)
+        print("Tokenizing {0:,} tweets...".format(x_train.shape[0] + x_dev.shape[0]))
+        x_dev = self._tokenize_texts(x_dev)
+        x_train = self._tokenize_texts(x_train)
+
+        y_train = keras.utils.to_categorical(y_train, num_classes=self._num_outputs)
+        y_dev = keras.utils.to_categorical(y_dev, num_classes=self._num_outputs)
+
+        print("Training model...")
+        history = self._model.fit(x_train, y_train, epochs=epochs, batch_size=self._batch_size,
+                                  validation_data=(x_dev, y_dev), callbacks=self._generate_callbacks())
+        return history
+
+    def predict(self, x):
+        self._load_tokenizer()
+        x = self._tokenize_texts(x)
+        return np.argmax(self._model.predict(x, batch_size=self._batch_size), axis=1)
+
+    def evaluate(self, x_test, y_test):
+        self._load_tokenizer()
+        x_test = self._tokenize_texts(x_test)
+        y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
+        return self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
+
+    def load_saved_model(self, filename):
+        if not path.exists(filename):
+            raise ValueError("Filename does not exist.", filename)
+        self._model = keras.models.load_model(filename, custom_objects={'top_5_acc': top_5_acc})
+
+    def save_model(self, filename):
+        self._model.save(filename)
 
     def _generate_callbacks(self):
         now = time.time()
@@ -81,37 +113,3 @@ class Model:
         texts = self._tokenizer.texts_to_sequences(texts)
         texts = pad_sequences(texts, maxlen=self._time_steps, truncating='pre')
         return texts
-
-    def train(self, x_train, y_train, x_dev, y_dev, epochs=7):
-        self._epochs = epochs
-
-        print("Tokenizing tweets...")
-        x_dev = self._tokenize_texts(x_dev)
-        x_train = self._tokenize_texts(x_train)
-
-        y_train = keras.utils.to_categorical(y_train, num_classes=self._num_outputs)
-        y_dev = keras.utils.to_categorical(y_dev, num_classes=self._num_outputs)
-
-        print("Training model...")
-        history = self._model.fit(x_train, y_train, epochs=self._epochs, batch_size=self._batch_size,
-                                  validation_data=(x_dev, y_dev), callbacks=self._generate_callbacks())
-        return history
-
-    def predict(self, x):
-        self._load_tokenizer()
-        x = self._tokenize_texts(x)
-        return np.argmax(self._model.predict(x, batch_size=self._batch_size), axis=1)
-
-    def evaluate(self, x_test, y_test):
-        self._load_tokenizer()
-        x_test = self._tokenize_texts(x_test)
-        y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
-        return self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
-
-    def load_saved_model(self, filename):
-        if not path.exists(filename):
-            raise ValueError("Filename does not exist.", filename)
-        self._model = keras.models.load_model(filename, custom_objects={'top_5_acc': top_5_acc})
-
-    def save_model(self, filename):
-        self._model.save(filename)

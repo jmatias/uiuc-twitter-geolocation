@@ -1,5 +1,6 @@
 import argparse
-from data import twus
+from data import twus, constants
+from os import path, environ
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
@@ -11,6 +12,8 @@ if __name__ == '__main__':
     parser.add_argument("--tensorboard", action="store_true", help="Track training progress using Tensorboard.")
     args = parser.parse_args()
 
+    environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
     from models.twitter_geomodel import Model
 
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
@@ -18,5 +21,10 @@ if __name__ == '__main__':
     geoModel = Model(num_outputs=53, batch_size=args.batch_size, time_steps=args.max_words,
                      vocab_size=args.vocab_size, use_tensorboard=args.tensorboard)
 
+    geomodel_state_model_file = path.join(constants.DATACACHE_DIR, 'geomodel_state.h5')
+    if path.exists(geomodel_state_model_file):
+        print("Loading existing model at {0}".format(geomodel_state_model_file))
+        geoModel.load_saved_model(geomodel_state_model_file)
+
     geoModel.train(x_train, y_train, x_dev, y_dev, epochs=args.epochs)
-    # geoModel.save_model()
+    geoModel.save_model(geomodel_state_model_file)

@@ -7,6 +7,7 @@ import data.constants as constants
 import io
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
+import keras
 
 _dirname = path.dirname(path.abspath(__file__))
 
@@ -14,13 +15,13 @@ _TWITTER_TEST_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.test')
 _TWITTER_DEV_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.dev')
 _TWITTER_TRAIN_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.train')
 
-_TWITTER_PARSED_TEST_DATA = path.join(constants.DATACACHE_DIR, 'twus_test.pickle')
-_TWITTER_PARSED_DEV_DATA = path.join(constants.DATACACHE_DIR, 'twus_dev.pickle')
-_TWITTER_PARSED_TRAIN_DATA = path.join(constants.DATACACHE_DIR, 'twus_train.pickle')
+_TWITTER_PARSED_TEST_DATA = 'twus_test.pickle'
+_TWITTER_PARSED_DEV_DATA = 'twus_dev.pickle'
+_TWITTER_PARSED_TRAIN_DATA = 'twus_train.pickle'
 
-__TWITTER_PARSED_TEST_DATA_DROPBOX = ""
-__TWITTER_PARSED_DEV_DATA_DROPBOX = ""
-__TWITTER_PARSED_TRAIN_DATA_DROPBOX = ""
+_TWITTER_PARSED_TEST_DATA_DROPBOX = "https://dl.dropbox.com/s/kg09i1z32n12o98/twus_dev.pickle"
+_TWITTER_PARSED_DEV_DATA_DROPBOX = "https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle"
+_TWITTER_PARSED_TRAIN_DATA_DROPBOX = "https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle"
 
 
 def load_state_data():
@@ -54,22 +55,17 @@ def load_region_data():
 
 
 def _load_data():
-    if not path.exists(_TWITTER_PARSED_DEV_DATA):
-        _extract_twitter_data(_TWITTER_DEV_DATA, _TWITTER_PARSED_DEV_DATA)
+    temp_dev_data = keras.utils.get_file(_TWITTER_PARSED_DEV_DATA, _TWITTER_PARSED_DEV_DATA_DROPBOX)
+    temp_test_data = keras.utils.get_file(_TWITTER_PARSED_TEST_DATA, _TWITTER_PARSED_TEST_DATA_DROPBOX)
+    temp_train_data = keras.utils.get_file(_TWITTER_PARSED_TRAIN_DATA, _TWITTER_PARSED_TRAIN_DATA_DROPBOX)
 
-    if not path.exists(_TWITTER_PARSED_TEST_DATA):
-        _extract_twitter_data(_TWITTER_TEST_DATA, _TWITTER_PARSED_TEST_DATA)
-
-    if not path.exists(_TWITTER_PARSED_TRAIN_DATA):
-        _extract_twitter_data(_TWITTER_TRAIN_DATA, _TWITTER_PARSED_TRAIN_DATA)
-
-    with open(_TWITTER_PARSED_DEV_DATA, 'rb') as handle:
+    with open(temp_dev_data, 'rb') as handle:
         dev_data = pickle.load(handle)
 
-    with open(_TWITTER_PARSED_TEST_DATA, 'rb') as handle:
+    with open(temp_test_data, 'rb') as handle:
         test_data = pickle.load(handle)
 
-    with open(_TWITTER_PARSED_TRAIN_DATA, 'rb') as handle:
+    with open(temp_train_data, 'rb') as handle:
         train_data = pickle.load(handle)
 
     dev_df = pd.DataFrame(dev_data, columns=['username', 'tweets', 'state', 'region', 'state_name', 'region_name'])
@@ -99,8 +95,8 @@ def _extract_twitter_data(filepath, pickle_filename):
             print("\r{0}% complete...".format(i / percent_pt / 10), end='')
 
         username = data[i][0]
-        stateStr = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
-        if not stateStr:
+        state_str = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
+        if not state_str:
             continue
 
         tweets = data[i][3]
@@ -108,10 +104,10 @@ def _extract_twitter_data(filepath, pickle_filename):
         words = [ps.stem(w) for w in words]
         tweets = ' '.join(words)
 
-        state = geocoder.get_state_index(stateStr)
-        region = geocoder.get_state_region(stateStr)
-        regionStr = geocoder.get_state_region_name(stateStr)
-        row = (username, tweets, state, region, stateStr, regionStr)
+        state = geocoder.get_state_index(state_str)
+        region = geocoder.get_state_region(state_str)
+        region_str = geocoder.get_state_region_name(state_str)
+        row = (username, tweets, state, region, state_str, region_str)
         parsed_data.append(row)
 
     if not path.exists(path.dirname(path.abspath(pickle_filename))):

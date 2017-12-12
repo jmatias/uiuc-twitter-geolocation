@@ -54,8 +54,8 @@ fabric.properties
 .idea/misc.xml
 
 /tokenizer.pickle
-/geomodel.h5
+/.data_cache/geomodel.h5
 /log_dir/
-/geomodel_state.h5
+/.data_cache/geomodel_state.h5
 /datasets/
 /.data_cache/
