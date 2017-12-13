@@ -1,0 +1,38 @@
+TwitterGeolocation package
+==========================
+
+Subpackages
+-----------
+
+.. toctree::
+
+    TwitterGeolocation.data
+    TwitterGeolocation.models
+
+Submodules
+----------
+
+TwitterGeolocation\.predict module
+----------------------------------
+
+.. automodule:: TwitterGeolocation.predict
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+TwitterGeolocation\.train module
+--------------------------------
+
+.. automodule:: TwitterGeolocation.train
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: TwitterGeolocation
+    :members:
+    :undoc-members:
+    :show-inheritance:

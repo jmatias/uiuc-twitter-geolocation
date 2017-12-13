@@ -1,0 +1,22 @@
+TwitterGeolocation\.models package
+==================================
+
+Submodules
+----------
+
+TwitterGeolocation\.models\.twitter\_geomodel module
+----------------------------------------------------
+
+.. automodule:: TwitterGeolocation.models.twitter_geomodel
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: TwitterGeolocation.models
+    :members:
+    :undoc-members:
+    :show-inheritance:

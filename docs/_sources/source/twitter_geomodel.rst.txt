@@ -1,0 +1,7 @@
+twitter\_geomodel
+========================
+
+.. automodule:: twitter_geomodel
+    :members:
+    :undoc-members:
+    :show-inheritance:

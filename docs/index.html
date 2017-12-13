@@ -1,0 +1,324 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Welcome to Twitter Geo’s documentation! &mdash; Twitter Geolocation Predictor 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Twitter Geolocation Predictor 0.1 documentation" href="#"/>
+        <link rel="next" title="Models" href="source/models.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="#" class="icon icon-home"> Twitter Geolocation Predictor
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/data.html">Data</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">Twitter Geolocation Predictor</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>Welcome to Twitter Geo’s documentation!</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="welcome-to-twitter-geo-s-documentation">
+<h1>Welcome to Twitter Geo’s documentation!<a class="headerlink" href="#welcome-to-twitter-geo-s-documentation" title="Permalink to this headline">¶</a></h1>
+</div>
+<div class="section" id="twitter-geolocation-predictor">
+<h1>Twitter Geolocation Predictor<a class="headerlink" href="#twitter-geolocation-predictor" title="Permalink to this headline">¶</a></h1>
+<p>This is a deep-learning tool to predict the location of a Twitter user
+based solely on the text content of his/her tweets without any other
+form of metadata.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<p>The Twitter Geolocation Predictor is a Recurrent Neural Network
+classifier. Every training sample is a collection of tweets labeled with
+a location (e.g. a country, a state, a region, etc.). The model will
+tokenize all tweets into a sequence of words, and feed them into an
+<a class="reference external" href="https://en.wikipedia.org/wiki/Word_embedding">Embedding Layer</a>. The
+embeddings will learn the meaning of words and use them as input for two
+stacked <a class="reference external" href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">Long-Short Term
+Memory</a>
+layers. A <a class="reference external" href="https://en.wikipedia.org/wiki/Softmax_function">Softmax</a>
+fully-connected layer at the end yields the classification result.</p>
+<img src="https://dl.dropbox.com/s/qxmkayuswz2hs04/GeoModelGraph.png" height="600px"></div>
+<div class="section" id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="installation">
+<h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
+<p>Clone the repository, and install all the dependencies using pip.</p>
+<div class="code sh highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>This will install the latest CPU version of Tensorflow. If you would
+like to run on a GPU, follow the Tensorflow-GPU <a class="reference external" href="https://www.tensorflow.org/install/">installation
+instructions</a>.</p>
+</div>
+<div class="section" id="using-a-pre-processed-dataset">
+<h3>Using A Pre-Processed Dataset<a class="headerlink" href="#using-a-pre-processed-dataset" title="Permalink to this headline">¶</a></h3>
+<p>The tool comes with a built-in dataset of ~430K users located in the
+U.S. (~410K for training, ~10K for development and ~10K for testing). To
+train a model using this dataset, run the train.py sample script.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="n">train</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">epochs</span> <span class="mi">5</span> <span class="o">--</span><span class="n">batch_size</span> <span class="mi">64</span> <span class="o">--</span><span class="n">vocab_size</span> <span class="mi">20000</span>
+
+<span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
+<span class="n">Downloading</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">dropbox</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">s</span><span class="o">/</span><span class="n">ze4ov5j30u9rf5m</span><span class="o">/</span><span class="n">twus_test</span><span class="o">.</span><span class="n">pickle</span>
+<span class="mi">55181312</span><span class="o">/</span><span class="mi">55180071</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">11</span><span class="n">s</span> <span class="mi">0</span><span class="n">us</span><span class="o">/</span><span class="n">step</span>
+<span class="n">Downloading</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">dropbox</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">s</span><span class="o">/</span><span class="n">kg09i1z32n12o98</span><span class="o">/</span><span class="n">twus_dev</span><span class="o">.</span><span class="n">pickle</span>
+<span class="mi">57229312</span><span class="o">/</span><span class="mi">57227360</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">12</span><span class="n">s</span> <span class="mi">0</span><span class="n">us</span><span class="o">/</span><span class="n">step</span>
+<span class="n">Downloading</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">dropbox</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">s</span><span class="o">/</span><span class="mi">0</span><span class="n">d4l6jmgguzonou</span><span class="o">/</span><span class="n">twus_train</span><span class="o">.</span><span class="n">pickle</span>
+<span class="n">Downloading</span> <span class="n">data</span> <span class="kn">from</span> <span class="nn">https</span><span class="p">:</span><span class="o">//</span><span class="n">dl</span><span class="o">.</span><span class="n">dropbox</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">s</span><span class="o">/</span><span class="mi">0</span><span class="n">d4l6jmgguzonou</span><span class="o">/</span><span class="n">twus_train</span><span class="o">.</span><span class="n">pickle</span>
+<span class="mi">2427592704</span><span class="o">/</span><span class="mi">2427591168</span> <span class="p">[</span><span class="o">==============================</span><span class="p">]</span> <span class="o">-</span> <span class="mi">486</span><span class="n">s</span> <span class="mi">0</span><span class="n">us</span><span class="o">/</span><span class="n">step</span>
+<span class="n">Building</span> <span class="n">tweet</span> <span class="n">Tokenizer</span> <span class="n">using</span> <span class="n">a</span> <span class="mi">20</span><span class="p">,</span><span class="mi">000</span> <span class="n">word</span> <span class="n">vocabulary</span><span class="o">.</span> <span class="n">This</span> <span class="n">may</span> <span class="n">take</span> <span class="n">a</span> <span class="k">while</span><span class="o">...</span>
+<span class="n">Tokenizing</span> <span class="mi">419</span><span class="p">,</span><span class="mi">869</span> <span class="n">tweets</span><span class="o">.</span> <span class="n">This</span> <span class="n">may</span> <span class="n">take</span> <span class="n">a</span> <span class="k">while</span><span class="o">...</span>
+<span class="n">Training</span> <span class="n">model</span><span class="o">...</span>
+<span class="n">Train</span> <span class="n">on</span> <span class="mi">410336</span> <span class="n">samples</span><span class="p">,</span> <span class="n">validate</span> <span class="n">on</span> <span class="mi">9533</span> <span class="n">samples</span>
+<span class="n">Epoch</span> <span class="mi">1</span><span class="o">/</span><span class="mi">5</span>
+  <span class="mi">4608</span><span class="o">/</span><span class="mi">410336</span> <span class="p">[</span><span class="o">..............................</span><span class="p">]</span> <span class="o">-</span> <span class="n">ETA</span><span class="p">:</span> <span class="mi">39</span><span class="p">:</span><span class="mi">11</span> <span class="o">-</span> <span class="n">loss</span><span class="p">:</span> <span class="mf">3.7145</span> <span class="o">-</span> <span class="n">acc</span><span class="p">:</span> <span class="mf">0.0911</span> <span class="o">-</span> <span class="n">top_5_acc</span><span class="p">:</span> <span class="mf">0.3092</span>
+</pre></div>
+</div>
+<p>You can also try using this data from your own source code.</p>
+<div class="code ipython highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">data</span> <span class="k">import</span> <span class="n">twus</span>
+<span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">(</span><span class="mi">410336</span><span class="p">,)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="mi">410336</span><span class="p">,)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="training-the-model">
+<h2>Training the Model<a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="making-predictions">
+<h2>Making Predictions<a class="headerlink" href="#making-predictions" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/data.html">Data</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="source/models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Javier Matias.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

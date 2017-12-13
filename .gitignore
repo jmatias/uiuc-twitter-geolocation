@@ -59,6 +59,5 @@ fabric.properties
 /.data_cache/geomodel_state.h5
 /datasets/
 /.data_cache/
-/docs/_templates/
-/docs/_build/
-/docs/_static/
+/docs-src/_build/
+/docs-src/_static/
