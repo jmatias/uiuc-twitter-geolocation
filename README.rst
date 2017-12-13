@@ -5,16 +5,8 @@ This is a deep-learning tool to predict the location of a Twitter user
 based solely on the text content of his/her tweets without any other
 form of metadata.
 
-Contents
---------
 
--  `Overview <#overview>`__
--  `Getting Started <#getting-started>`__
-    -  `Installation <#installation>`__
-    -  `Using a Pre-Processed Dataset <#using-a-pre-processed-dataset>`__
-    -  [Supplying your own data]
--  `Training the Model <#training-the-model>`__
--  `Making Predictions <#making-predictions>`__
+.. contents::
 
 Overview
 --------
