@@ -6,7 +6,7 @@ based solely on the text content of his/her tweets without any other
 form of metadata.
 
 
-.. contents::
+
 
 Overview
 --------
@@ -88,3 +88,4 @@ Training the Model
 
 Making Predictions
 ------------------
+

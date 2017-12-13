@@ -15,15 +15,18 @@ def top_5_acc(y_true, y_pred):
 
 
 class Model:
-    def __init__(self, num_outputs, use_tensorboard=False, batch_size=32, time_steps=500,
-                 vocab_size=50000):
+    """
+    Documentation for model.
+    """
+    def __init__(self, num_outputs, use_tensorboard=False, batch_size=64, time_steps=500,
+                 vocab_size=20000):
         """
 
         :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
         :param use_tensorboard: Track training progress using Tensorboard. Default: true.
-        :param batch_size: Default: 32
+        :param batch_size: Default: 64
         :param time_steps: Default: 500
-        :param vocab_size: Use the top N most frequent words. Default: 50,000
+        :param vocab_size: Use the top N most frequent words. Default: 20,000
         """
         self._use_tensorboard = use_tensorboard
         self._batch_size = batch_size
@@ -44,9 +47,19 @@ class Model:
                             metrics=['accuracy', top_5_acc])
 
     def train(self, x_train, y_train, x_dev, y_dev, epochs=7):
+        """
+        Fit the model to the training data.
 
-        self._create_tokenizer(x_train)
-        print("Tokenizing {0:,} tweets...".format(x_train.shape[0] + x_dev.shape[0]))
+        :param x_train: Training samples.
+        :param y_train: Training labels.
+        :param x_dev: Validation samples.
+        :param y_dev: Validation labels.
+        :param epochs: Number of times to train on the whole data set.
+        :return:
+        """
+
+        self._create_tokenizer(x_train, force=False)
+        print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
 
@@ -69,7 +82,12 @@ class Model:
         y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
         return self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
 
-    def load_saved_model(self, filename):
+    def load_saved_model(self, filename) -> Sequential:
+        """
+        Load a previously trained model from disk.
+        :param filename: The H5 model.
+        :return:The Keras sequential model.
+        """
         if not path.exists(filename):
             raise ValueError("Filename does not exist.", filename)
         self._model = keras.models.load_model(filename, custom_objects={'top_5_acc': top_5_acc})
@@ -85,14 +103,14 @@ class Model:
                                                            write_images=True)
         return [tensorboard_callback]
 
-    def _create_tokenizer(self, x_train):
+    def _create_tokenizer(self, x_train, force=True):
 
-        if path.exists(self._tokenizer_cachefile):
+        if path.exists(self._tokenizer_cachefile) and not force:
             print("Loading cached tokenizer...")
             with open(self._tokenizer_cachefile, 'rb') as handle:
                 self._tokenizer = pickle.load(handle)
         else:
-            print("Building tweet Tokenizer using a {0} word vocabulary...".format(self._vocab_size))
+            print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(self._vocab_size))
             self._tokenizer = Tokenizer(num_words=self._vocab_size, lower=True,
                                         filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
             self._tokenizer.fit_on_texts(x_train)
