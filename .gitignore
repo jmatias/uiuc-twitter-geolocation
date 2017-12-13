@@ -60,4 +60,4 @@ fabric.properties
 /datasets/
 /.data_cache/
 /docs-src/_build/
-/docs-src/_static/
+/docs-src/static/

@@ -1,7 +1,0 @@
-reverse\_geocode module
-=======================
-
-.. automodule:: reverse_geocode
-    :members:
-    :undoc-members:
-    :show-inheritance:
