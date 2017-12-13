@@ -1,8 +1,6 @@
 Models
 ==============
 
-Submodules
-----------
 
 models\.twitter\_geomodel module
 --------------------------------

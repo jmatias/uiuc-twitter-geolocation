@@ -18,6 +18,7 @@ class Model:
     """
     Documentation for model.
     """
+
     def __init__(self, num_outputs, use_tensorboard=False, batch_size=64, time_steps=500,
                  vocab_size=20000):
         """
@@ -51,12 +52,21 @@ class Model:
         Fit the model to the training data.
 
         :param x_train: Training samples.
-        :param y_train: Training labels.
+        :param y_train: Training labels. Must be a vector of integer values.
         :param x_dev: Validation samples.
-        :param y_dev: Validation labels.
+        :param y_dev: Validation labels. Must be a vector of integer values.
         :param epochs: Number of times to train on the whole data set.
         :return:
+        :raises: ValueError: If the number of training samples and labels do not match.
         """
+
+        if x_train.shape[0] != y_train.shape[0]:
+            raise ValueError("x_train and y_train must have the same number of samples.", x_train.shape[0],
+                             y_train.shape[0])
+
+        if x_dev.shape[0] != y_dev.shape[0]:
+            raise ValueError("x_dev and y_dev must have the same number of samples.", x_dev.shape[0],
+                             y_dev.shape[0])
 
         self._create_tokenizer(x_train, force=False)
         print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
@@ -72,6 +82,12 @@ class Model:
         return history
 
     def predict(self, x):
+        """
+        Predict the location of the given samples.
+
+        :param x: A vector of tweets. Each row corresponds to a single user.
+        :return: The prediction results in the form of an integer vector.
+        """
         self._load_tokenizer()
         x = self._tokenize_texts(x)
         return np.argmax(self._model.predict(x, batch_size=self._batch_size), axis=1)
@@ -82,17 +98,22 @@ class Model:
         y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
         return self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
 
-    def load_saved_model(self, filename) -> Sequential:
+    def load_saved_model(self, filename):
         """
         Load a previously trained model from disk.
+
         :param filename: The H5 model.
-        :return:The Keras sequential model.
+        :return:
         """
         if not path.exists(filename):
             raise ValueError("Filename does not exist.", filename)
         self._model = keras.models.load_model(filename, custom_objects={'top_5_acc': top_5_acc})
 
     def save_model(self, filename):
+        """
+        Save the current model and trained weights for later use.
+        :param filename: Path to store the model.
+        """
         self._model.save(filename)
 
     def _generate_callbacks(self):
@@ -110,7 +131,8 @@ class Model:
             with open(self._tokenizer_cachefile, 'rb') as handle:
                 self._tokenizer = pickle.load(handle)
         else:
-            print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(self._vocab_size))
+            print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(
+                self._vocab_size))
             self._tokenizer = Tokenizer(num_words=self._vocab_size, lower=True,
                                         filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
             self._tokenizer.fit_on_texts(x_train)
