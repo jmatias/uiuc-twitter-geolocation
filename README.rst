@@ -10,9 +10,9 @@ Contents
 
 -  `Overview <#overview>`__
 -  `Getting Started <#getting-started>`__
-  -  `Installation <#installation>`__
-  -  `Using a Pre-Processed Dataset <#using-a-pre-processed-dataset>`__
-  -  [Supplying your own data]
+    -  `Installation <#installation>`__
+    -  `Using a Pre-Processed Dataset <#using-a-pre-processed-dataset>`__
+    -  [Supplying your own data]
 -  `Training the Model <#training-the-model>`__
 -  `Making Predictions <#making-predictions>`__
 
