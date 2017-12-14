@@ -175,12 +175,13 @@ stacked <a class="reference external" href="http://colah.github.io/posts/2015-08
 Memory</a>
 layers. A <a class="reference external" href="https://en.wikipedia.org/wiki/Softmax_function">Softmax</a>
 fully-connected layer at the end yields the classification result.</p>
-<img src="https://dl.dropbox.com/s/qxmkayuswz2hs04/GeoModelGraph.png" style="width:650px;display:block;margin:auto;"></div>
+<a class="reference internal image-reference" href="https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png"><img alt="https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png" class="align-center" src="https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png" style="width: 500px;" /></a>
+</div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
-<p>Clone the repository, and install all the dependencies using pip.</p>
+<p>Clone the repository and install all the dependencies using pip.</p>
 <div class="code sh highlight-default"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">pip3</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
@@ -228,10 +229,41 @@ train a model using this dataset, run the train.py sample script.</p>
 </div>
 <div class="section" id="training-the-model">
 <h2>Training the Model<a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">twgeo.models.twitter_geomodel</span> <span class="k">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">twgeo.data</span> <span class="k">import</span> <span class="n">twus</span>
+
+<span class="c1"># x_train is an array of text. Each element contains all the tweets for a given user.</span>
+<span class="c1"># y_train is an array of integer values, corresponding to each particular location we want to train against.</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+
+<span class="c1"># num_outputs is the total number of possible classes (locations). In this example, 50 US states plus territories.</span>
+<span class="c1"># time_steps is the total number of individual words to consider for each user. Some users have more tweets then others.</span>
+<span class="c1"># In this example, we are capping it at 500 words per user.</span>
+<span class="n">geoModel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">num_outputs</span><span class="o">=</span><span class="mi">53</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                 <span class="n">vocab_size</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+
+<span class="n">geoModel</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">geoModel</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;mymodel.h5&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="making-predictions">
 <h2>Making Predictions<a class="headerlink" href="#making-predictions" title="Permalink to this headline">¶</a></h2>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">twgeo.models.twitter_geomodel</span> <span class="k">import</span> <span class="n">Model</span>
+<span class="kn">from</span> <span class="nn">twgeo.data</span> <span class="k">import</span> <span class="n">twus</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+
+<span class="n">geoModel</span><span class="o">.</span><span class="n">load_saved_model</span><span class="p">(</span><span class="s1">&#39;mymodel.h5&#39;</span><span class="p">)</span>
+<span class="n">geoModel</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="source/twgeo.data.html">Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="source/twgeo.models.html">Models</a></li>
+</ul>
 </div>
 </div>
 </div>

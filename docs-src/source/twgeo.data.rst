@@ -1,7 +1,7 @@
 Data
 ==================
 
-twgeo.data.input module
+twgeo.data.input
 -----------------------
 
 .. automodule:: twgeo.data.input
@@ -9,7 +9,7 @@ twgeo.data.input module
     :undoc-members:
     :show-inheritance:
 
-twgeo.data.reverse_geocode module
+twgeo.data.reverse_geocode
 ---------------------------------
 
 .. automodule:: twgeo.data.reverse_geocode
@@ -17,7 +17,7 @@ twgeo.data.reverse_geocode module
     :undoc-members:
     :show-inheritance:
 
-twgeo.data.twus module
+twgeo.data.twus 
 ----------------------
 
 .. automodule:: twgeo.data.twus

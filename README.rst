@@ -22,7 +22,7 @@ fully-connected layer at the end yields the classification result.
 
     
 .. image:: https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png
-   :width: 40pt
+   :width: 500px
    :align: center
 
 
@@ -33,7 +33,7 @@ Getting Started
 Installation
 ~~~~~~~~~~~~
 
-Clone the repository, and install all the dependencies using pip.
+Clone the repository and install all the dependencies using pip.
 
 .. code:: sh
 
@@ -90,6 +90,7 @@ Training the Model
 .. code:: python
 
     from twgeo.models.twitter_geomodel import Model
+    from twgeo.data import twus
     
     # x_train is an array of text. Each element contains all the tweets for a given user. 
     # y_train is an array of integer values, corresponding to each particular location we want to train against.
@@ -106,4 +107,14 @@ Training the Model
 
 Making Predictions
 ------------------
+
+.. code:: python
+
+    from twgeo.models.twitter_geomodel import Model
+    from twgeo.data import twus
+
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+
+    geoModel.load_saved_model('mymodel.h5')
+    geoModel.predict(x_test)
 

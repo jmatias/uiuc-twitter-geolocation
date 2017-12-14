@@ -9,7 +9,6 @@
 .. toctree::
     :caption: API
     :maxdepth: 1
-    :hidden:
 
 
     source/twgeo.data

@@ -16,12 +16,13 @@ def top_5_acc(y_true, y_pred):
 
 class Model:
     """
-    Documentation for model.
+    Geolocation prediction model.
     """
 
     def __init__(self, num_outputs, use_tensorboard=False, batch_size=64, time_steps=500,
                  vocab_size=20000):
         """
+        Location prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).
 
         :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
         :param use_tensorboard: Track training progress using Tensorboard. Default: true.
@@ -55,7 +56,7 @@ class Model:
         :param y_train: Training labels. Must be a vector of integer values.
         :param x_dev: Validation samples.
         :param y_dev: Validation labels. Must be a vector of integer values.
-        :param epochs: Number of times to train on the whole data set.
+        :param epochs: Number of times to train on the whole data set. Default: 7
         :return:
         :raises: ValueError: If the number of training samples and the number of labels do not match.
         """
@@ -93,10 +94,21 @@ class Model:
         return np.argmax(self._model.predict(x, batch_size=self._batch_size), axis=1)
 
     def evaluate(self, x_test, y_test):
+        """
+        Get the loss, accuracy and top 5 accuracy of the model.
+
+        :param x_test: Evaluation samples.
+        :param y_test: Evaluation labels.
+        :return: A dictionary of metric, value pairs.
+        """
         self._load_tokenizer()
         x_test = self._tokenize_texts(x_test)
         y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
-        return self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
+        metrics =  self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
+        d = {}
+        for i in range(len(self._model.metrics_names)):
+            d[self._model.metrics_names[i]] = metrics[i]
+        return d
 
     def load_saved_model(self, filename):
         """
@@ -112,6 +124,7 @@ class Model:
     def save_model(self, filename):
         """
         Save the current model and trained weights for later use.
+
         :param filename: Path to store the model.
         """
         self._model.save(filename)

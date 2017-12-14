@@ -1,7 +1,7 @@
 Models
 ====================
 
-twgeo.models.twitter_geomodel module
+twgeo.models.twitter_geomodel
 ------------------------------------
 
 .. automodule:: twgeo.models.twitter_geomodel

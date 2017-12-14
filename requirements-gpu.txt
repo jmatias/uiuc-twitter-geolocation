@@ -1,6 +1,0 @@
-tensorflow-gpu
-keras
-nltk
-pandas
-numpy
-sqlalchemy

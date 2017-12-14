@@ -1,5 +1,5 @@
-from models.twitter_geomodel import Model
-from data import twus, constants
+from twgeo.models.twitter_geomodel import Model
+from twgeo.data import twus, constants
 from os import path
 
 if __name__ == '__main__':
