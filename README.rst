@@ -6,8 +6,6 @@ based solely on the text content of his/her tweets without any other
 form of metadata.
 
 
-
-
 Overview
 --------
 
@@ -22,8 +20,12 @@ Memory <http://colah.github.io/posts/2015-08-Understanding-LSTMs/>`__
 layers. A `Softmax <https://en.wikipedia.org/wiki/Softmax_function>`__
 fully-connected layer at the end yields the classification result.
 
-.. raw:: html
-    <img src="https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png">
+    
+.. image:: https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png
+   :width: 40pt
+   :align: center
+
+
 
 Getting Started
 ---------------
@@ -84,6 +86,23 @@ You can also try using this data from your own source code.
 
 Training the Model
 ------------------
+
+.. code:: python
+
+    from twgeo.models.twitter_geomodel import Model
+    
+    # x_train is an array of text. Each element contains all the tweets for a given user. 
+    # y_train is an array of integer values, corresponding to each particular location we want to train against.
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+
+    # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus territories.
+    # time_steps is the total number of individual words to consider for each user. Some users have more tweets then others. 
+    # In this example, we are capping it at 500 words per user.
+    geoModel = Model(num_outputs=53, batch_size=64, time_steps=500,
+                     vocab_size=20000)
+                     
+    geoModel.train(x_train, y_train, x_dev, y_dev, epochs=5)
+    geoModel.save_model('mymodel.h5')
 
 Making Predictions
 ------------------
