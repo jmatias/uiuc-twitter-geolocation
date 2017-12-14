@@ -14,7 +14,9 @@ class ReverseGeocode():
         self._db = None
 
     def reverse_geocode_state(self, location):
-        """Find the corresponding US state of a given pair of coordinates.
+        """
+        Find the corresponding US state of a given pair of coordinates.
+
         :param location: A tuple containing the (latitude, longitude)
         :return: The corresponding state. Example: 'FL'
         """

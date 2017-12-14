@@ -36,7 +36,10 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="Twitter Geolocation Predictor 0.1 documentation" href="../index.html"/>
-        <link rel="prev" title="Models" href="models.html"/> 
+        <link rel="next" title="Models" href="twgeo.models.html"/>
+        <link rel="prev" title="Twitter Geolocation Predictor" href="../index.html"/>
+    <link href="../_static/mystyles.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -91,16 +94,14 @@
             
               <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Data</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-data.constants">data.constants module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-data.input">data.input module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-data.reverse_geocode">data.reverse_geocode module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-data.twus">data.twus module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-data">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.data.input">twgeo.data.input module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.data.reverse_geocode">twgeo.data.reverse_geocode module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.data.twus">twgeo.data.twus module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.data">Module contents</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="twgeo.models.html">Models</a></li>
 </ul>
 
             
@@ -151,7 +152,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/source/data.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/source/twgeo.data.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -166,68 +167,70 @@
             
   <div class="section" id="data">
 <h1>Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-data.constants">
-<span id="data-constants-module"></span><h2>data.constants module<a class="headerlink" href="#module-data.constants" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-data.input">
-<span id="data-input-module"></span><h2>data.input module<a class="headerlink" href="#module-data.input" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.data.input">
+<span id="twgeo-data-input-module"></span><h2>twgeo.data.input module<a class="headerlink" href="#module-twgeo.data.input" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="data.input.TwitterInput">
-<em class="property">class </em><code class="descclassname">data.input.</code><code class="descname">TwitterInput</code><a class="headerlink" href="#data.input.TwitterInput" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.input.TwitterInput">
+<em class="property">class </em><code class="descclassname">twgeo.data.input.</code><code class="descname">TwitterInput</code><a class="headerlink" href="#twgeo.data.input.TwitterInput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-data.reverse_geocode">
-<span id="data-reverse-geocode-module"></span><h2>data.reverse_geocode module<a class="headerlink" href="#module-data.reverse_geocode" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.data.reverse_geocode">
+<span id="twgeo-data-reverse-geocode-module"></span><h2>twgeo.data.reverse_geocode module<a class="headerlink" href="#module-twgeo.data.reverse_geocode" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="data.reverse_geocode.ReverseGeocode">
-<em class="property">class </em><code class="descclassname">data.reverse_geocode.</code><code class="descname">ReverseGeocode</code><a class="headerlink" href="#data.reverse_geocode.ReverseGeocode" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.reverse_geocode.ReverseGeocode">
+<em class="property">class </em><code class="descclassname">twgeo.data.reverse_geocode.</code><code class="descname">ReverseGeocode</code><a class="headerlink" href="#twgeo.data.reverse_geocode.ReverseGeocode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <dl class="method">
-<dt id="data.reverse_geocode.ReverseGeocode.get_state_index">
-<code class="descname">get_state_index</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#data.reverse_geocode.ReverseGeocode.get_state_index" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.reverse_geocode.ReverseGeocode.get_state_index">
+<code class="descname">get_state_index</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.reverse_geocode.ReverseGeocode.get_state_index" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="data.reverse_geocode.ReverseGeocode.get_state_region">
-<code class="descname">get_state_region</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#data.reverse_geocode.ReverseGeocode.get_state_region" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.reverse_geocode.ReverseGeocode.get_state_region">
+<code class="descname">get_state_region</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.reverse_geocode.ReverseGeocode.get_state_region" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="data.reverse_geocode.ReverseGeocode.get_state_region_name">
-<code class="descname">get_state_region_name</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#data.reverse_geocode.ReverseGeocode.get_state_region_name" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.reverse_geocode.ReverseGeocode.get_state_region_name">
+<code class="descname">get_state_region_name</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.reverse_geocode.ReverseGeocode.get_state_region_name" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="data.reverse_geocode.ReverseGeocode.reverse_geocode_state">
-<code class="descname">reverse_geocode_state</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#data.reverse_geocode.ReverseGeocode.reverse_geocode_state" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the corresponding US state of a given pair of coordinates.
-:param location: A tuple containing the (latitude, longitude)
-:return: The corresponding state. Example: ‘FL’</p>
+<dt id="twgeo.data.reverse_geocode.ReverseGeocode.reverse_geocode_state">
+<code class="descname">reverse_geocode_state</code><span class="sig-paren">(</span><em>location</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.reverse_geocode.ReverseGeocode.reverse_geocode_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the corresponding US state of a given pair of coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>location</strong> – A tuple containing the (latitude, longitude)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corresponding state. Example: ‘FL’</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
 
 </div>
-<div class="section" id="module-data.twus">
-<span id="data-twus-module"></span><h2>data.twus module<a class="headerlink" href="#module-data.twus" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.data.twus">
+<span id="twgeo-data-twus-module"></span><h2>twgeo.data.twus module<a class="headerlink" href="#module-twgeo.data.twus" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="data.twus.load_region_data">
-<code class="descclassname">data.twus.</code><code class="descname">load_region_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data.twus.load_region_data" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.twus.load_region_data">
+<code class="descclassname">twgeo.data.twus.</code><code class="descname">load_region_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus.load_region_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="function">
-<dt id="data.twus.load_state_data">
-<code class="descclassname">data.twus.</code><code class="descname">load_state_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#data.twus.load_state_data" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.data.twus.load_state_data">
+<code class="descclassname">twgeo.data.twus.</code><code class="descname">load_state_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus.load_state_data" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-data">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-data" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-twgeo.data" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -241,8 +244,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="twgeo.models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="models.html" class="btn btn-neutral" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="../index.html" class="btn btn-neutral" title="Twitter Geolocation Predictor" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

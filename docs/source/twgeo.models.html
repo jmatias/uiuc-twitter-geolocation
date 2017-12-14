@@ -36,8 +36,9 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="Twitter Geolocation Predictor 0.1 documentation" href="../index.html"/>
-        <link rel="next" title="Data" href="data.html"/>
-        <link rel="prev" title="Welcome to Twitter Geo’s documentation!" href="../index.html"/> 
+        <link rel="prev" title="Data" href="twgeo.data.html"/>
+    <link href="../_static/mystyles.css" rel="stylesheet" type="text/css">
+
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -92,13 +93,12 @@
             
               <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="twgeo.data.html">Data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-models.twitter_geomodel">models.twitter_geomodel module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-models">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.models.twitter_geomodel">twgeo.models.twitter_geomodel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-twgeo.models">Module contents</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a></li>
 </ul>
 
             
@@ -149,7 +149,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/source/models.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/source/twgeo.models.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -164,14 +164,11 @@
             
   <div class="section" id="models">
 <h1>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="submodules">
-<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
-</div>
-<div class="section" id="module-models.twitter_geomodel">
-<span id="models-twitter-geomodel-module"></span><h2>models.twitter_geomodel module<a class="headerlink" href="#module-models.twitter_geomodel" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.models.twitter_geomodel">
+<span id="twgeo-models-twitter-geomodel-module"></span><h2>twgeo.models.twitter_geomodel module<a class="headerlink" href="#module-twgeo.models.twitter_geomodel" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="models.twitter_geomodel.Model">
-<em class="property">class </em><code class="descclassname">models.twitter_geomodel.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>num_outputs</em>, <em>use_tensorboard=False</em>, <em>batch_size=64</em>, <em>time_steps=500</em>, <em>vocab_size=20000</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.Model" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.models.twitter_geomodel.Model">
+<em class="property">class </em><code class="descclassname">twgeo.models.twitter_geomodel.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>num_outputs</em>, <em>use_tensorboard=False</em>, <em>batch_size=64</em>, <em>time_steps=500</em>, <em>vocab_size=20000</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
 <p>Documentation for model.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -190,31 +187,52 @@
 </tbody>
 </table>
 <dl class="method">
-<dt id="models.twitter_geomodel.Model.evaluate">
-<code class="descname">evaluate</code><span class="sig-paren">(</span><em>x_test</em>, <em>y_test</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.Model.evaluate" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.models.twitter_geomodel.Model.evaluate">
+<code class="descname">evaluate</code><span class="sig-paren">(</span><em>x_test</em>, <em>y_test</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model.evaluate" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="models.twitter_geomodel.Model.load_saved_model">
-<code class="descname">load_saved_model</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span> &#x2192; keras.models.Sequential<a class="headerlink" href="#models.twitter_geomodel.Model.load_saved_model" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load a previously trained model from disk.
-:param filename: The H5 model.
-:return:The Keras sequential model.</p>
+<dt id="twgeo.models.twitter_geomodel.Model.load_saved_model">
+<code class="descname">load_saved_model</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model.load_saved_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a previously trained model from disk.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – The H5 model.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
-<dt id="models.twitter_geomodel.Model.predict">
-<code class="descname">predict</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.Model.predict" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="twgeo.models.twitter_geomodel.Model.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Predict the location of the given samples.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – A vector of tweets. Each row corresponds to a single user.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prediction results in the form of an integer vector.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
 
 <dl class="method">
-<dt id="models.twitter_geomodel.Model.save_model">
-<code class="descname">save_model</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.Model.save_model" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="twgeo.models.twitter_geomodel.Model.save_model">
+<code class="descname">save_model</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current model and trained weights for later use.
+:param filename: Path to store the model.</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="models.twitter_geomodel.Model.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_dev</em>, <em>y_dev</em>, <em>epochs=7</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.Model.train" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.models.twitter_geomodel.Model.train">
+<code class="descname">train</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_dev</em>, <em>y_dev</em>, <em>epochs=7</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.Model.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to the training data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -222,14 +240,17 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>x_train</strong> – Training samples.</li>
-<li><strong>y_train</strong> – Training labels.</li>
+<li><strong>y_train</strong> – Training labels. Must be a vector of integer values.</li>
 <li><strong>x_dev</strong> – Validation samples.</li>
-<li><strong>y_dev</strong> – Validation labels.</li>
+<li><strong>y_dev</strong> – Validation labels. Must be a vector of integer values.</li>
 <li><strong>epochs</strong> – Number of times to train on the whole data set.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ValueError: If the number of training samples and the number of labels do not match.</p>
 </td>
 </tr>
 </tbody>
@@ -239,13 +260,13 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="models.twitter_geomodel.top_5_acc">
-<code class="descclassname">models.twitter_geomodel.</code><code class="descname">top_5_acc</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="headerlink" href="#models.twitter_geomodel.top_5_acc" title="Permalink to this definition">¶</a></dt>
+<dt id="twgeo.models.twitter_geomodel.top_5_acc">
+<code class="descclassname">twgeo.models.twitter_geomodel.</code><code class="descname">top_5_acc</code><span class="sig-paren">(</span><em>y_true</em>, <em>y_pred</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.twitter_geomodel.top_5_acc" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </div>
-<div class="section" id="module-models">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-twgeo.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-twgeo.models" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -259,10 +280,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="data.html" class="btn btn-neutral float-right" title="Data" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="../index.html" class="btn btn-neutral" title="Welcome to Twitter Geo’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="twgeo.data.html" class="btn btn-neutral" title="Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

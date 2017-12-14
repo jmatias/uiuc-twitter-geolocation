@@ -1,5 +1,5 @@
 import argparse
-from data import twus, constants
+from twgeo.data import twus, constants
 from os import path, environ
 
 if __name__ == '__main__':
@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-    from models.twitter_geomodel import Model
+    from twgeo.models.twitter_geomodel import Model
 
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
 

@@ -3,18 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Twitter Geo's documentation!
-=======================================
 
 .. include:: ../README.rst
 
 .. toctree::
     :caption: API
     :maxdepth: 1
+    :hidden:
 
 
-    source/models
-    source/data
+    source/twgeo.data
+    source/twgeo.models
 
 
 
@@ -25,4 +24,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

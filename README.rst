@@ -24,7 +24,7 @@ fully-connected layer at the end yields the classification result.
 
 .. raw:: html
 
-    <img src="https://dl.dropbox.com/s/qxmkayuswz2hs04/GeoModelGraph.png" height="600px">
+    <img src="https://dl.dropbox.com/s/qxmkayuswz2hs04/GeoModelGraph.png" style="width:650px;display:block;margin:auto;">
 
 Getting Started
 ---------------

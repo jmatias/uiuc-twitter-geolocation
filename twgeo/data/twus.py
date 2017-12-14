@@ -2,8 +2,8 @@ import pandas as pd
 import re
 import pickle
 from os import path, makedirs
-import data.reverse_geocode as rg
-import data.constants as constants
+import twgeo.data.reverse_geocode as rg
+import twgeo.data.constants as constants
 import io
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
