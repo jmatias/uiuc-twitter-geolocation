@@ -23,8 +23,7 @@ layers. A `Softmax <https://en.wikipedia.org/wiki/Softmax_function>`__
 fully-connected layer at the end yields the classification result.
 
 .. raw:: html
-
-    <img src="https://dl.dropbox.com/s/qxmkayuswz2hs04/GeoModelGraph.png" style="width:650px;display:block;margin:auto;">
+    <img src="https://dl.dropbox.com/s/tvar2ccihtq0ijg/GeoModelGraph.png">
 
 Getting Started
 ---------------
