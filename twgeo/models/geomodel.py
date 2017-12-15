@@ -20,7 +20,7 @@ class Model:
     """
 
     def __init__(self, num_outputs, use_tensorboard=False, batch_size=64, time_steps=500,
-                 vocab_size=20000):
+                 vocab_size=20000, hidden_layer_size=100):
         """
         Location prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).
 
@@ -29,6 +29,7 @@ class Model:
         :param batch_size: Default: 64
         :param time_steps: Default: 500
         :param vocab_size: Use the top N most frequent words. Default: 20,000
+        :param hidden_layer_size: Number of neurons in the hidden layers. Default: 100
         """
         self._use_tensorboard = use_tensorboard
         self._batch_size = batch_size
@@ -38,10 +39,13 @@ class Model:
         self._tokenizer = None
         self._tokenizer_cachefile = path.join(constants.DATACACHE_DIR, "tokenizer_cache.pickle")
 
+        print("\nBuilding model...\nHidden layer size: {0}\nAnalyzing up to {1} tweets for each sample.".format(
+            hidden_layer_size, time_steps))
+
         self._model = Sequential()
         self._model.add(Embedding(self._vocab_size, 150))
-        self._model.add(LSTM(300, dropout=0.5, recurrent_dropout=0.5, return_sequences=True))
-        self._model.add(LSTM(300, dropout=0.5, recurrent_dropout=0.5))
+        self._model.add(LSTM(hidden_layer_size, dropout=0.5, recurrent_dropout=0.5, return_sequences=True))
+        self._model.add(LSTM(hidden_layer_size, dropout=0.5, recurrent_dropout=0.5))
         self._model.add(Dropout(0.5))
         self._model.add(Dense(self._num_outputs, activation='softmax'))
         self._model.compile(optimizer='adam',
@@ -69,7 +73,7 @@ class Model:
             raise ValueError("x_dev and y_dev must have the same number of samples.", x_dev.shape[0],
                              y_dev.shape[0])
 
-        self._create_tokenizer(x_train, force=False)
+        self._create_tokenizer(x_train, force=True)
         print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
@@ -104,7 +108,7 @@ class Model:
         self._load_tokenizer()
         x_test = self._tokenize_texts(x_test)
         y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
-        metrics =  self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
+        metrics = self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
         d = {}
         for i in range(len(self._model.metrics_names)):
             d[self._model.metrics_names[i]] = metrics[i]
@@ -138,7 +142,6 @@ class Model:
         return [tensorboard_callback]
 
     def _create_tokenizer(self, x_train, force=True):
-
         if path.exists(self._tokenizer_cachefile) and not force:
             print("Loading cached tokenizer...")
             with open(self._tokenizer_cachefile, 'rb') as handle:

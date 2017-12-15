@@ -1,4 +1,4 @@
-from twgeo.models.twitter_geomodel import Model
+from twgeo.models.geomodel import Model
 from twgeo.data import twus, constants
 from os import path
 

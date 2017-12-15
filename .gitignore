@@ -1,7 +1,7 @@
 
 /datasets/AmazonDriveDownload.zip
 /datasets/twus/
-/data_cache/*pickle
+/twgeo/.data_cache/*pickle
 __pycache__
 
 

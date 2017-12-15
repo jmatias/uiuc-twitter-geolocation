@@ -35,9 +35,9 @@ Installation
 
 Clone the repository and install all the dependencies using pip.
 
-.. code:: sh
+.. code:: console
 
-    sudo pip3 install -r requirements.txt
+    $ sudo pip3 install -r requirements.txt
 
 This will install the latest CPU version of Tensorflow. If you would
 like to run on a GPU, follow the Tensorflow-GPU `installation
@@ -50,9 +50,9 @@ The tool comes with a built-in dataset of ~430K users located in the
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.
 
-::
+.. code-block:: bash
 
-    python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000
+    $ python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000
 
     Using TensorFlow backend.
     Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle
@@ -60,8 +60,11 @@ train a model using this dataset, run the train.py sample script.
     Downloading data from https://dl.dropbox.com/s/kg09i1z32n12o98/twus_dev.pickle
     57229312/57227360 [==============================] - 12s 0us/step
     Downloading data from https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle
-    Downloading data from https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle
     2427592704/2427591168 [==============================] - 486s 0us/step
+
+    Building model...
+    Hidden layer size: 100
+    Analyzing up to 500 tweets for each sample.
     Building tweet Tokenizer using a 20,000 word vocabulary. This may take a while...
     Tokenizing 419,869 tweets. This may take a while...
     Training model...
@@ -71,7 +74,7 @@ train a model using this dataset, run the train.py sample script.
 
 You can also try using this data from your own source code.
 
-.. code:: ipython
+.. code-block:: ipython
 
     In [1]: from data import twus
     Using TensorFlow backend.
@@ -89,7 +92,7 @@ Training the Model
 
 .. code:: python
 
-    from twgeo.models.twitter_geomodel import Model
+    from twgeo.models.geomodel import Model
     from twgeo.data import twus
     
     # x_train is an array of text. Each element contains all the tweets for a given user. 
@@ -97,8 +100,8 @@ Training the Model
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
 
     # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus territories.
-    # time_steps is the total number of individual words to consider for each user. Some users have more tweets then others. 
-    # In this example, we are capping it at 500 words per user.
+    # time_steps is the total number of individual words to consider for each user.
+    # Some users have more tweets then others. In this example, we are capping it at 500 words per user.
     geoModel = Model(num_outputs=53, batch_size=64, time_steps=500,
                      vocab_size=20000)
                      
@@ -110,11 +113,11 @@ Making Predictions
 
 .. code:: python
 
-    from twgeo.models.twitter_geomodel import Model
+    from twgeo.models.geomodel import Model
     from twgeo.data import twus
 
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
 
     geoModel.load_saved_model('mymodel.h5')
-    geoModel.predict(x_test)
+    results = geoModel.predict(x_test)
 
