@@ -87,6 +87,36 @@ You can also try using this data from your own source code.
     In [4]: y_train.shape
     Out[4]: (410336,)
 
+
+Pre-Processing your own data
+----------------------------
+
++------------------------------------------------------------------+------------+
+| Tweet Text                                                       | Location   |
++==================================================================+============+
+| Hello world! This is a tweet. <eot> This is another tweet. <eot> | Florida    |
++------------------------------------------------------------------+------------+
+| Going to see Star Wars tonite!                                   | Puerto Rico|
++------------------------------------------------------------------+------------+
+| Pizza was delicious! <eot> I'm another tweeeeeet <eot>           | California |
++------------------------------------------------------------------+------------+
+
+
+Given a raw dataset stored in a CSV file like the one show above, we can preprocess said data using :code:`twgeo.data.input.read_csv_data()`. This function will:
+
+    1. Tokenize the tweet text.
+    2. Limit repeated characters to a maximum of 2. For example: 'Greeeeeetings' becomes 'Greetings'.
+    3. Perform `Porter stemming  <https://en.wikipedia.org/wiki/Stemming>`_ on each token.
+    4. Convert each token to lower case.
+
+The location data can be any string or integer value.
+
+.. code:: python
+
+    import twgeo.data.input as input
+    tweets, locations = input.read_csv_data('mydata.csv', tweet_txt_column_idx=0, location_column_idx=1)
+
+
 Training the Model
 ------------------
 

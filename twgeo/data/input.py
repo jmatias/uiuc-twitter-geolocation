@@ -17,16 +17,17 @@ def read_csv_data(csv_filename: str, location_column_idx: int, tweet_txt_column_
         1. Tokenize the tweet text.
         2. Limit repeated characters to a maximum of 2. For example: 'Greeeeeetings' becomes 'Greetings'.
         3. Perform `Porter stemming  <https://en.wikipedia.org/wiki/Stemming>`_ on each token.
+        4. Convert each token to lower case.
 
     :param csv_filename:
-    :param location_column_idx: The index of the CSV column that contains the location information.
-            This must be a discrete value such as string or integer.
-    :param tweet_txt_column_idx: The index of the CSV column that contains the tweet text.
+    :param location_column_idx: The zero-based index of the CSV column that contains the location information.
+            The data itself must be a discrete value (a string or integer).
+    :param tweet_txt_column_idx: The zero-based index of the CSV column that contains the tweet text.
     :return: Tuple (preprocessed_tweets, locations)
     """
     df = pd.read_csv(csv_filename)
-    tweets = df.iloc[:, tweet_txt_column_idx].values
-    locations = df.iloc[:, location_column_idx].values
+    tweets = df.iloc[:, tweet_txt_column_idx+1].values
+    locations = df.iloc[:, location_column_idx+1].values
 
     ps = PorterStemmer()
 
@@ -38,7 +39,7 @@ def read_csv_data(csv_filename: str, location_column_idx: int, tweet_txt_column_
         tweet_txt = tweets[i]
         words = word_tokenize(tweet_txt)
 
-        words = [ps.stem(re.sub('(.)\\1{2,}', '\\1\\1', w)) for w in words]
+        words = [ps.stem(re.sub('(.)\\1{2,}', '\\1\\1', w)).lower() for w in words]
         tweet_txt = ' '.join(words)
         tweets[i] = tweet_txt
 
