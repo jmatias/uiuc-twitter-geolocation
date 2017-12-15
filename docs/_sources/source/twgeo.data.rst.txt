@@ -17,10 +17,10 @@ twgeo.data.reverse_geocode
     :undoc-members:
     :show-inheritance:
 
-twgeo.data.twus 
-----------------------
+twgeo.data.twus_dataset
+-----------------------
 
-.. automodule:: twgeo.data.twus
+.. automodule:: twgeo.data.twus_dataset
     :members:
     :undoc-members:
     :show-inheritance:

@@ -14,10 +14,10 @@ if __name__ == '__main__':
 
     environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-    from twgeo.data import twus, constants
+    from twgeo.data import twus_dataset, constants
     from twgeo.models.geomodel import Model
 
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data()
 
     geoModel = Model(num_outputs=53, batch_size=args.batch_size, time_steps=args.max_words,
                      vocab_size=args.vocab_size, use_tensorboard=args.tensorboard)

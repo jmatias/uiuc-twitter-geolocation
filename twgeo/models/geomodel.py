@@ -39,7 +39,7 @@ class Model:
         self._tokenizer = None
         self._tokenizer_cachefile = path.join(constants.DATACACHE_DIR, "tokenizer_cache.pickle")
 
-        print("\nBuilding model...\nHidden layer size: {0}\nAnalyzing up to {1} tweets for each sample.".format(
+        print("\nBuilding model...\nHidden layer size: {0}\nAnalyzing up to {1} words for each sample.".format(
             hidden_layer_size, time_steps))
 
         self._model = Sequential()

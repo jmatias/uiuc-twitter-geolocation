@@ -10,7 +10,7 @@ state_table = pd.read_csv(_filename)
 
 class ReverseGeocode():
     """
-    Optional module to find the US state and Census region from a pair of global coordinates.
+    Convenience module to find the US state and Census region from a pair of global coordinates.
     This class assumes you have a Postgres PostGIS database installed locally. To setup PostGIS with US Census data,
     follow the instructions `found here <http://postgis.net/docs/postgis_installation.html#loading_extras_tiger_geocoder/>`_.
     """

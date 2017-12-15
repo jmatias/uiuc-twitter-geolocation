@@ -1,6 +1,12 @@
+"""
+Built-in dataset of ~450K US based users.
+
+"""
+
 import pandas as pd
 import re
 import pickle
+import math
 from os import path, makedirs
 import twgeo.data.reverse_geocode as rg
 import twgeo.data.constants as constants
@@ -14,6 +20,7 @@ _dirname = path.dirname(path.abspath(__file__))
 _TWITTER_TEST_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.test')
 _TWITTER_DEV_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.dev')
 _TWITTER_TRAIN_DATA = path.join(constants.DATASETS_DIR, 'twus/user_info.train')
+_TWITTER_CSV_DEV_DATA = 'twus_dev.csv'
 
 _TWITTER_PARSED_TEST_DATA = 'twus_test.pickle'
 _TWITTER_PARSED_DEV_DATA = 'twus_dev.pickle'
@@ -22,9 +29,16 @@ _TWITTER_PARSED_TRAIN_DATA = 'twus_train.pickle'
 _TWITTER_PARSED_TEST_DATA_DROPBOX = "https://dl.dropbox.com/s/kg09i1z32n12o98/twus_dev.pickle"
 _TWITTER_PARSED_DEV_DATA_DROPBOX = "https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle"
 _TWITTER_PARSED_TRAIN_DATA_DROPBOX = "https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle"
+_TWITTER_CSV_DEV_DATA_DROPBOX = "https://dl.dropbox.com/s/8drqqugn5fw7zbx/twus_dev.csv"
+_TWITTER_CSV_DEV_DATA_MD5 = "4e60b193ae5f4232c80d6e5f27b8c94e"
 
 
 def load_state_data():
+    """
+    Training samples labeled with the corresponding US State.
+
+    :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
+    """
     train_df, dev_df, test_df = _load_data()
 
     x_train = train_df['tweets'].values
@@ -40,6 +54,11 @@ def load_state_data():
 
 
 def load_region_data():
+    """
+    Training samples labeled with the corresponding US Census Region.
+
+    :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
+    """
     train_df, dev_df, test_df = _load_data()
 
     x_train = train_df['tweets'].values
@@ -91,7 +110,7 @@ def _extract_twitter_data(filepath, pickle_filename):
     total_lines = len(data)
     percent_pt = total_lines // 1000
     for i in range(0, len(data)):
-        if (i % percent_pt == 0):
+        if (i % math.floor(percent_pt) == 0):
             print("\r{0}% complete...".format(i / percent_pt / 10), end='')
 
         username = data[i][0]
@@ -101,7 +120,7 @@ def _extract_twitter_data(filepath, pickle_filename):
 
         tweets = data[i][3]
         words = word_tokenize(tweets)
-        words = [ps.stem(w) for w in words]
+        words = [ps.stem(re.sub('(.)\\1{2,}', '\\1\\1', w)) for w in words]
         tweets = ' '.join(words)
 
         state = geocoder.get_state_index(state_str)

@@ -1,10 +1,10 @@
 from twgeo.models.geomodel import Model
-from twgeo.data import twus, constants
+from twgeo.data import twus_dataset, constants
 from os import path
 
 if __name__ == '__main__':
 
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data()
 
     geoModel = Model(num_outputs=53, batch_size=256)
     lol = geoModel.predict(x_test)

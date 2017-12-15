@@ -1,10 +1,10 @@
 Models
 ====================
 
-twgeo.models.twitter_geomodel
+twgeo.models.geomodel
 ------------------------------------
 
-.. automodule:: twgeo.models.twitter_geomodel
+.. automodule:: twgeo.models.geomodel
     :members:
     :undoc-members:
     :show-inheritance:

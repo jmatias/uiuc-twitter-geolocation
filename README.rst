@@ -11,7 +11,7 @@ Overview
 
 The Twitter Geolocation Predictor is a Recurrent Neural Network
 classifier. Every training sample is a collection of tweets labeled with
-a location (e.g. a country, a state, a region, etc.). The model will
+a location (e.g. country, state, city, etc.). The model will
 tokenize all tweets into a sequence of words, and feed them into an
 `Embedding Layer <https://en.wikipedia.org/wiki/Word_embedding>`__. The
 embeddings will learn the meaning of words and use them as input for two
@@ -64,7 +64,7 @@ train a model using this dataset, run the train.py sample script.
 
     Building model...
     Hidden layer size: 100
-    Analyzing up to 500 tweets for each sample.
+    Analyzing up to 500 words for each sample.
     Building tweet Tokenizer using a 20,000 word vocabulary. This may take a while...
     Tokenizing 419,869 tweets. This may take a while...
     Training model...
@@ -99,9 +99,9 @@ Training the Model
     # y_train is an array of integer values, corresponding to each particular location we want to train against.
     x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
 
-    # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus territories.
+    # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus 3 territories.
     # time_steps is the total number of individual words to consider for each user.
-    # Some users have more tweets then others. In this example, we are capping it at 500 words per user.
+    # Some users have more tweets then others. In this example, we are capping it at a total of 500 words per user.
     geoModel = Model(num_outputs=53, batch_size=64, time_steps=500,
                      vocab_size=20000)
                      

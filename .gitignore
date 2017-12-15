@@ -61,3 +61,4 @@ fabric.properties
 /.data_cache/
 /docs-src/_build/
 /docs-src/static/
+throwaway.py
