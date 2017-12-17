@@ -102,14 +102,14 @@ Pre-Processing your own data
 +------------------------------------------------------------------+------------+
 
 
-Given a raw dataset stored in a CSV file like the one show above, we can preprocess said data using :code:`twgeo.data.input.read_csv_data()`. This function will:
+Given a raw dataset stored in a CSV file like the one shown above, we can preprocess said data using :code:`twgeo.data.input.read_csv_data()`. This function will:
 
     1. Tokenize the tweet text.
     2. Limit repeated characters to a maximum of 2. For example: 'Greeeeeetings' becomes 'Greetings'.
     3. Perform `Porter stemming  <https://en.wikipedia.org/wiki/Stemming>`_ on each token.
     4. Convert each token to lower case.
 
-The location data can be any string or integer value.
+The location data may be any string or integer value.
 
 .. code:: python
 

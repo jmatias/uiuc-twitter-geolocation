@@ -1,12 +1,15 @@
+import pickle
+import time
+from os import path
+
+import keras
+import numpy as np
 from keras.layers import Dense, Dropout, LSTM, Embedding
 from keras.models import Sequential
-from keras.preprocessing.text import Tokenizer
 from keras.preprocessing.sequence import pad_sequences
-import keras
-import time
-import pickle
-import numpy as np
-from os import path
+from keras.preprocessing.text import Tokenizer
+from sklearn import preprocessing
+
 from twgeo.data import constants
 
 
@@ -73,7 +76,13 @@ class Model:
             raise ValueError("x_dev and y_dev must have the same number of samples.", x_dev.shape[0],
                              y_dev.shape[0])
 
-        self._create_tokenizer(x_train, force=True)
+        le = preprocessing.LabelEncoder()
+        le.fit(y_train)
+        y_train = le.transform(y_train)
+        y_dev = le.transform(y_dev)
+
+
+        self._create_tokenizer(x_train, force=False)
         print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
@@ -135,7 +144,7 @@ class Model:
 
     def _generate_callbacks(self):
         now = time.time()
-        log_dir = './log_dir/{0}'.format(str(int(now)))
+        log_dir = './.tensorboard_dir/{0}'.format(str(int(now)))
         tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=0,
                                                            write_graph=True, batch_size=self._batch_size,
                                                            write_images=True)

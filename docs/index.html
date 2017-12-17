@@ -230,6 +230,45 @@ Epoch <span class="m">1</span>/5
 </div>
 </div>
 </div>
+<div class="section" id="pre-processing-your-own-data">
+<h2>Pre-Processing your own data<a class="headerlink" href="#pre-processing-your-own-data" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="85%" />
+<col width="15%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Tweet Text</th>
+<th class="head">Location</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Hello world! This is a tweet. &lt;eot&gt; This is another tweet. &lt;eot&gt;</td>
+<td>Florida</td>
+</tr>
+<tr class="row-odd"><td>Going to see Star Wars tonite!</td>
+<td>Puerto Rico</td>
+</tr>
+<tr class="row-even"><td>Pizza was delicious! &lt;eot&gt; I’m another tweeeeeet &lt;eot&gt;</td>
+<td>California</td>
+</tr>
+</tbody>
+</table>
+<p>Given a raw dataset stored in a CSV file like the one shown above, we can preprocess said data using <code class="code docutils literal"><span class="pre">twgeo.data.input.read_csv_data()</span></code>. This function will:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li>Tokenize the tweet text.</li>
+<li>Limit repeated characters to a maximum of 2. For example: ‘Greeeeeetings’ becomes ‘Greetings’.</li>
+<li>Perform <a class="reference external" href="https://en.wikipedia.org/wiki/Stemming">Porter stemming</a> on each token.</li>
+<li>Convert each token to lower case.</li>
+</ol>
+</div></blockquote>
+<p>The location data may be any string or integer value.</p>
+<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">twgeo.data.input</span> <span class="k">as</span> <span class="nn">input</span>
+<span class="n">tweets</span><span class="p">,</span> <span class="n">locations</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">read_csv_data</span><span class="p">(</span><span class="s1">&#39;mydata.csv&#39;</span><span class="p">,</span> <span class="n">tweet_txt_column_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">location_column_idx</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="training-the-model">
 <h2>Training the Model<a class="headerlink" href="#training-the-model" title="Permalink to this headline">¶</a></h2>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">twgeo.models.geomodel</span> <span class="k">import</span> <span class="n">Model</span>

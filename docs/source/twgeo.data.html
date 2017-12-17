@@ -178,6 +178,7 @@
 <li>Tokenize the tweet text.</li>
 <li>Limit repeated characters to a maximum of 2. For example: ‘Greeeeeetings’ becomes ‘Greetings’.</li>
 <li>Perform <a class="reference external" href="https://en.wikipedia.org/wiki/Stemming">Porter stemming</a> on each token.</li>
+<li>Convert each token to lower case.</li>
 </ol>
 </div></blockquote>
 <table class="docutils field-list" frame="void" rules="none">
@@ -186,9 +187,9 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>csv_filename</strong> – </li>
-<li><strong>location_column_idx</strong> – The index of the CSV column that contains the location information.
-This must be a discrete value such as string or integer.</li>
-<li><strong>tweet_txt_column_idx</strong> – The index of the CSV column that contains the tweet text.</li>
+<li><strong>location_column_idx</strong> – The zero-based index of the CSV column that contains the location information.
+The data itself must be a discrete value (a string or integer).</li>
+<li><strong>tweet_txt_column_idx</strong> – The zero-based index of the CSV column that contains the tweet text.</li>
 </ul>
 </td>
 </tr>

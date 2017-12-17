@@ -2,18 +2,23 @@
 Built-in dataset of ~450K US based users.
 
 """
-
-import pandas as pd
-import re
-import pickle
-import math
-from os import path, makedirs
-import twgeo.data.reverse_geocode as rg
-import twgeo.data.constants as constants
 import io
+import math
+import pickle
+import re
+import sys
+import time
+from os import path, makedirs
+
+import keras
+import pandas as pd
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
-import keras
+
+sys.path.insert(0, path.abspath('../../'))
+
+import twgeo.data.reverse_geocode as rg
+from twgeo.data import constants
 
 _dirname = path.dirname(path.abspath(__file__))
 
@@ -108,10 +113,28 @@ def _extract_twitter_data(filepath, pickle_filename):
     parsed_data = []
     geocoder = rg.ReverseGeocode()
     total_lines = len(data)
-    percent_pt = total_lines // 1000
+    percent_pt = math.ceil(total_lines / 1000)
+    now = time.time()
+    start = now
+
     for i in range(0, len(data)):
         if (i % math.floor(percent_pt) == 0):
-            print("\r{0}% complete...".format(i / percent_pt / 10), end='')
+            now = time.time()
+            if i != 0:
+                time_per_unit = (now - start) / i
+            else:
+                time_per_unit = 99
+            eta = time_per_unit * (total_lines - i)
+            if eta > 3600:
+                eta_format = '%d:%02d:%02d' % (eta // 3600, (eta % 3600) // 60, eta % 60)
+            elif eta > 60:
+                eta_format = '%d:%02d' % (eta // 60, eta % 60)
+            else:
+                eta_format = '%ds' % eta
+
+            info = "\r{0:.2f}% complete ({1:,}/{2:,}). ETA: {3}           ".format(i / percent_pt / 10, i, total_lines,
+                                                                                   eta_format)
+            print(info, end='')
 
         username = data[i][0]
         state_str = geocoder.reverse_geocode_state((data[i][1], data[i][2]))
@@ -120,7 +143,7 @@ def _extract_twitter_data(filepath, pickle_filename):
 
         tweets = data[i][3]
         words = word_tokenize(tweets)
-        words = [ps.stem(re.sub('(.)\\1{2,}', '\\1\\1', w)) for w in words]
+        words = (ps.stem(re.sub('(.)\\1{2,}', '\\1\\1', w)) for w in words)
         tweets = ' '.join(words)
 
         state = geocoder.get_state_index(state_str)

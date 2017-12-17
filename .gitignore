@@ -2,6 +2,7 @@
 /datasets/AmazonDriveDownload.zip
 /datasets/twus/
 /twgeo/.data_cache/*pickle
+/twgeo/**/*pickle
 __pycache__
 
 
@@ -56,9 +57,11 @@ fabric.properties
 /tokenizer.pickle
 /.data_cache/geomodel.h5
 /log_dir/
+/.tensorboard_dir/
 /.data_cache/geomodel_state.h5
 /datasets/
 /.data_cache/
 /docs-src/_build/
 /docs-src/static/
 throwaway.py
+/twus_dev.csv
