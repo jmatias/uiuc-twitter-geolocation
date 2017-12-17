@@ -168,26 +168,44 @@
 <span id="twgeo-models-geomodel"></span><h2>twgeo.models.geomodel<a class="headerlink" href="#module-twgeo.models.geomodel" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="twgeo.models.geomodel.Model">
-<em class="property">class </em><code class="descclassname">twgeo.models.geomodel.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>num_outputs</em>, <em>use_tensorboard=False</em>, <em>batch_size=64</em>, <em>time_steps=500</em>, <em>vocab_size=20000</em>, <em>hidden_layer_size=100</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">twgeo.models.geomodel.</code><code class="descname">Model</code><span class="sig-paren">(</span><em>use_tensorboard=True</em>, <em>batch_size=64</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
-<p>Geolocation prediction model.</p>
-<p>Location prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).</p>
+<p>Geolocation prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>num_outputs</strong> – Number of output classes. For example, in the case of Census regions num of classes is 4.</li>
 <li><strong>use_tensorboard</strong> – Track training progress using Tensorboard. Default: true.</li>
 <li><strong>batch_size</strong> – Default: 64</li>
-<li><strong>time_steps</strong> – Default: 500</li>
-<li><strong>vocab_size</strong> – Use the top N most frequent words. Default: 20,000</li>
-<li><strong>hidden_layer_size</strong> – Number of neurons in the hidden layers. Default: 100</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="method">
+<dt id="twgeo.models.geomodel.Model.build_model">
+<code class="descname">build_model</code><span class="sig-paren">(</span><em>num_outputs</em>, <em>time_steps=500</em>, <em>vocab_size=20000</em>, <em>hidden_layer_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model.build_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the model.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>num_outputs</strong> – Number of output classes. For example, in the case of Census regions num of classes is 4.</li>
+<li><strong>time_steps</strong> – Default: 500</li>
+<li><strong>vocab_size</strong> – Use the top N most frequent words. Default: 20,000</li>
+<li><strong>hidden_layer_size</strong> – Number of neurons in the hidden layers. Default: 128</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="twgeo.models.geomodel.Model.evaluate">
 <code class="descname">evaluate</code><span class="sig-paren">(</span><em>x_test</em>, <em>y_test</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model.evaluate" title="Permalink to this definition">¶</a></dt>
@@ -235,7 +253,7 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> – A vector of tweets. Each row corresponds to a single user.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prediction results in the form of an integer vector.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The prediction results.</td>
 </tr>
 </tbody>
 </table>
@@ -249,7 +267,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Path to store the model.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – Prefix for the model filenames.</td>
 </tr>
 </tbody>
 </table>
@@ -257,7 +275,7 @@
 
 <dl class="method">
 <dt id="twgeo.models.geomodel.Model.train">
-<code class="descname">train</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_dev</em>, <em>y_dev</em>, <em>epochs=7</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model.train" title="Permalink to this definition">¶</a></dt>
+<code class="descname">train</code><span class="sig-paren">(</span><em>x_train</em>, <em>y_train</em>, <em>x_dev</em>, <em>y_dev</em>, <em>epochs=7</em>, <em>reset_model=False</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.models.geomodel.Model.train" title="Permalink to this definition">¶</a></dt>
 <dd><p>Fit the model to the training data.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -269,6 +287,7 @@
 <li><strong>x_dev</strong> – Validation samples.</li>
 <li><strong>y_dev</strong> – Validation labels. Must be a vector of integer values.</li>
 <li><strong>epochs</strong> – Number of times to train on the whole data set. Default: 7</li>
+<li><strong>reset_model</strong> – If this is set to True, it will discard any previously trained model and start from scratch.</li>
 </ul>
 </td>
 </tr>

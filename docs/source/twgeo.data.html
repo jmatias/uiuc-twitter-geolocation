@@ -282,13 +282,15 @@ follow the instructions <a class="reference external" href="http://postgis.net/d
 <p>Built-in dataset of ~450K US based users.</p>
 <dl class="function">
 <dt id="twgeo.data.twus_dataset.load_region_data">
-<code class="descclassname">twgeo.data.twus_dataset.</code><code class="descname">load_region_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus_dataset.load_region_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">twgeo.data.twus_dataset.</code><code class="descname">load_region_data</code><span class="sig-paren">(</span><em>size='large'</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus_dataset.load_region_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training samples labeled with the corresponding US Census Region.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)</td>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">size: ‘small’: 50,000 samples, ‘mid’: 100,000 samples, ‘large’: 410,000 samples.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)</td>
 </tr>
 </tbody>
 </table>
@@ -296,13 +298,15 @@ follow the instructions <a class="reference external" href="http://postgis.net/d
 
 <dl class="function">
 <dt id="twgeo.data.twus_dataset.load_state_data">
-<code class="descclassname">twgeo.data.twus_dataset.</code><code class="descname">load_state_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus_dataset.load_state_data" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">twgeo.data.twus_dataset.</code><code class="descname">load_state_data</code><span class="sig-paren">(</span><em>size='large'</em><span class="sig-paren">)</span><a class="headerlink" href="#twgeo.data.twus_dataset.load_state_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Training samples labeled with the corresponding US State.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)</td>
+<tr class="field-odd field"><th class="field-name">Param:</th><td class="field-body">size: ‘small’: 50,000 samples, ‘mid’: 100,000 samples, ‘large’: 410,000 samples.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)</td>
 </tr>
 </tbody>
 </table>

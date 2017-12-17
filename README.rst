@@ -50,9 +50,9 @@ The tool comes with a built-in dataset of ~430K users located in the
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.
 
-.. code-block:: bash
+.. code-block:: console
 
-    $ python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000
+    $ python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000 --hidden_size 100
 
     Using TensorFlow backend.
     Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle
@@ -132,22 +132,30 @@ Training the Model
     # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus 3 territories.
     # time_steps is the total number of individual words to consider for each user.
     # Some users have more tweets then others. In this example, we are capping it at a total of 500 words per user.
-    geoModel = Model(num_outputs=53, batch_size=64, time_steps=500,
-                     vocab_size=20000)
+    geoModel = Model(batch_size=64)
+    geoModel.build_model(num_outputs=53, time_steps=500,vocab_size=20000)
                      
     geoModel.train(x_train, y_train, x_dev, y_dev, epochs=5)
-    geoModel.save_model('mymodel.h5')
+    geoModel.save_model('mymodel')
 
 Making Predictions
 ------------------
 
-.. code:: python
+.. code:: ipython
 
-    from twgeo.models.geomodel import Model
-    from twgeo.data import twus
+    In [1]: from twgeo.models.geomodel import Model
+    Using TensorFlow backend.
 
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    In [2]: from twgeo.data import twus_dataset as twus
 
-    geoModel.load_saved_model('mymodel.h5')
-    results = geoModel.predict(x_test)
+    In [3]: x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data(size='small')
+
+    In [4]: geoModel = Model()
+
+    In [5]: geoModel.load_saved_model('mymodel')
+    Loading saved model...
+
+    In [6]: geoModel.predict(x_test)
+    Out[6]: array(['CA', 'FL', 'NY', ..., 'TX', 'MA', 'KY'], dtype=object)
+
 

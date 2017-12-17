@@ -1,6 +1,6 @@
 import pickle
 import time
-from os import path
+from os import path, environ
 
 import keras
 import numpy as np
@@ -10,37 +10,45 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from sklearn import preprocessing
 
-from twgeo.data import constants
-
 
 def top_5_acc(y_true, y_pred):
     return keras.metrics.top_k_categorical_accuracy(y_true, y_pred, k=5)
 
 
+environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+
 class Model:
     """
-    Geolocation prediction model.
+    Geolocation prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).
     """
 
-    def __init__(self, num_outputs, use_tensorboard=False, batch_size=64, time_steps=500,
-                 vocab_size=20000, hidden_layer_size=100):
+    def __init__(self, use_tensorboard=True, batch_size=64):
         """
-        Location prediction model. Consists of 4 layers ( Embedding, LSTM, LSTM and Dense).
 
-        :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
         :param use_tensorboard: Track training progress using Tensorboard. Default: true.
         :param batch_size: Default: 64
-        :param time_steps: Default: 500
-        :param vocab_size: Use the top N most frequent words. Default: 20,000
-        :param hidden_layer_size: Number of neurons in the hidden layers. Default: 100
         """
         self._use_tensorboard = use_tensorboard
         self._batch_size = batch_size
+        self._tokenizer = None
+        self._label_encoder = None
+
+    def build_model(self, num_outputs, time_steps=500, vocab_size=20000, hidden_layer_size=128):
+        """
+        Build the model.
+
+        :param num_outputs: Number of output classes. For example, in the case of Census regions num of classes is 4.
+        :param time_steps: Default: 500
+        :param vocab_size: Use the top N most frequent words. Default: 20,000
+        :param hidden_layer_size: Number of neurons in the hidden layers. Default: 128
+        :return:
+        """
+
         self._time_steps = time_steps
         self._vocab_size = vocab_size
         self._num_outputs = num_outputs
-        self._tokenizer = None
-        self._tokenizer_cachefile = path.join(constants.DATACACHE_DIR, "tokenizer_cache.pickle")
+        self._hidden_layer_size = hidden_layer_size
 
         print("\nBuilding model...\nHidden layer size: {0}\nAnalyzing up to {1} words for each sample.".format(
             hidden_layer_size, time_steps))
@@ -55,7 +63,7 @@ class Model:
                             loss='categorical_crossentropy',
                             metrics=['accuracy', top_5_acc])
 
-    def train(self, x_train, y_train, x_dev, y_dev, epochs=7):
+    def train(self, x_train, y_train, x_dev, y_dev, epochs=7, reset_model=False):
         """
         Fit the model to the training data.
 
@@ -64,6 +72,7 @@ class Model:
         :param x_dev: Validation samples.
         :param y_dev: Validation labels. Must be a vector of integer values.
         :param epochs: Number of times to train on the whole data set. Default: 7
+        :param reset_model: If this is set to True, it will discard any previously trained model and start from scratch.
         :return:
         :raises: ValueError: If the number of training samples and the number of labels do not match.
         """
@@ -76,13 +85,11 @@ class Model:
             raise ValueError("x_dev and y_dev must have the same number of samples.", x_dev.shape[0],
                              y_dev.shape[0])
 
-        le = preprocessing.LabelEncoder()
-        le.fit(y_train)
-        y_train = le.transform(y_train)
-        y_dev = le.transform(y_dev)
+        self._create_label_encoder(y_train)
+        y_train = self._label_encoder.transform(y_train)
+        y_dev = self._label_encoder.transform(y_dev)
 
-
-        self._create_tokenizer(x_train, force=False)
+        self._create_tokenizer(x_train, force=reset_model)
         print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
@@ -90,9 +97,13 @@ class Model:
         y_train = keras.utils.to_categorical(y_train, num_classes=self._num_outputs)
         y_dev = keras.utils.to_categorical(y_dev, num_classes=self._num_outputs)
 
+        if self._use_tensorboard:
+            callbacks = self._generate_callbacks()
+        else:
+            callbacks = []
         print("Training model...")
         history = self._model.fit(x_train, y_train, epochs=epochs, batch_size=self._batch_size,
-                                  validation_data=(x_dev, y_dev), callbacks=self._generate_callbacks())
+                                  validation_data=(x_dev, y_dev), callbacks=callbacks)
         return history
 
     def predict(self, x):
@@ -100,11 +111,14 @@ class Model:
         Predict the location of the given samples.
 
         :param x: A vector of tweets. Each row corresponds to a single user.
-        :return: The prediction results in the form of an integer vector.
+        :return: The prediction results.
         """
-        self._load_tokenizer()
         x = self._tokenize_texts(x)
-        return np.argmax(self._model.predict(x, batch_size=self._batch_size), axis=1)
+        predictions = self._model.predict(x, batch_size=self._batch_size)
+
+        predictions = np.argmax(predictions, axis=1)
+        predictions = self._label_encoder.inverse_transform(predictions)
+        return predictions
 
     def evaluate(self, x_test, y_test):
         """
@@ -114,8 +128,10 @@ class Model:
         :param y_test: Evaluation labels.
         :return: A dictionary of metric, value pairs.
         """
-        self._load_tokenizer()
+        # self._load_tokenizer()
         x_test = self._tokenize_texts(x_test)
+
+        y_test = self._label_encoder.transform(y_test)
         y_test = keras.utils.to_categorical(y_test, num_classes=self._num_outputs)
         metrics = self._model.evaluate(x_test, y_test, batch_size=self._batch_size)
         d = {}
@@ -130,17 +146,58 @@ class Model:
         :param filename: The H5 model.
         :return:
         """
-        if not path.exists(filename):
-            raise ValueError("Filename does not exist.", filename)
-        self._model = keras.models.load_model(filename, custom_objects={'top_5_acc': top_5_acc})
+        model_filename = filename + ".h5"
+        tokenizer_filename = filename + ".tokenizer"
+        label_encoder_filename = filename + ".labelencoder"
+        metadata_filename = filename + ".meta"
+
+        if path.exists(model_filename):
+            print("Loading saved model...")
+        else:
+            raise Exception("Saved model {0} does not exist.".format(model_filename), model_filename)
+
+        self._model = keras.models.load_model(model_filename, custom_objects={'top_5_acc': top_5_acc})
+
+        with open(tokenizer_filename, 'rb') as handle:
+            self._tokenizer = pickle.load(handle)
+
+        with open(label_encoder_filename, 'rb') as handle:
+            self._label_encoder = pickle.load(handle)
+
+        with open(metadata_filename, 'rb') as handle:
+            metadata = pickle.load(handle)
+            self._vocab_size = metadata['vocab_size']
+            self._hidden_layer_size = metadata['hidden_layer_size']
+            self._num_outputs = metadata['num_outputs']
+            self._time_steps = metadata['time_steps']
 
     def save_model(self, filename):
         """
         Save the current model and trained weights for later use.
 
-        :param filename: Path to store the model.
+        :param filename: Prefix for the model filenames.
         """
-        self._model.save(filename)
+
+        model_filename = filename + ".h5"
+        tokenizer_filename = filename + ".tokenizer"
+        label_encoder_filename = filename + ".labelencoder"
+        metadata_filename = filename + ".meta"
+
+        self._model.save(model_filename)
+
+        with open(tokenizer_filename, 'wb') as handle:
+            pickle.dump(self._tokenizer, handle)
+
+        with open(label_encoder_filename, 'wb') as handle:
+            pickle.dump(self._label_encoder, handle)
+
+        metadata = {'hidden_layer_size': self._hidden_layer_size,
+                    'vocab_size': self._vocab_size,
+                    'num_outputs': self._num_outputs,
+                    'time_steps': self._time_steps}
+
+        with open(metadata_filename, 'wb') as handle:
+            pickle.dump(metadata, handle)
 
     def _generate_callbacks(self):
         now = time.time()
@@ -151,30 +208,17 @@ class Model:
         return [tensorboard_callback]
 
     def _create_tokenizer(self, x_train, force=True):
-        if path.exists(self._tokenizer_cachefile) and not force:
-            print("Loading cached tokenizer...")
-            with open(self._tokenizer_cachefile, 'rb') as handle:
-                self._tokenizer = pickle.load(handle)
-        else:
-            print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(
-                self._vocab_size))
-            self._tokenizer = Tokenizer(num_words=self._vocab_size, lower=True,
-                                        filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
-            self._tokenizer.fit_on_texts(x_train)
-            with open(self._tokenizer_cachefile, 'wb') as handle:
-                pickle.dump(self._tokenizer, handle)
+        print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(
+            self._vocab_size))
+        self._tokenizer = Tokenizer(num_words=self._vocab_size, lower=True,
+                                    filters='!"#$%&()*+,-./:;<=>?@[\\]^_`{}~\t\n')
+        self._tokenizer.fit_on_texts(x_train)
 
-    def _load_tokenizer(self):
-        if self._tokenizer is None:
-            if path.exists(self._tokenizer_cachefile):
-                print("Loading cached tokenizer...")
-                with open(self._tokenizer_cachefile, 'rb') as handle:
-                    self._tokenizer = pickle.load(handle)
-            else:
-                raise Exception("Tokenizer has not been trained.")
+    def _create_label_encoder(self, y_train):
+        self._label_encoder = preprocessing.LabelEncoder()
+        self._label_encoder.fit(y_train)
 
     def _tokenize_texts(self, texts):
-        self._load_tokenizer()
         texts = self._tokenizer.texts_to_sequences(texts)
         texts = pad_sequences(texts, maxlen=self._time_steps, truncating='pre')
         return texts

@@ -194,25 +194,25 @@ instructions</a>.</p>
 <p>The tool comes with a built-in dataset of ~430K users located in the
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.</p>
-<div class="highlight-bash"><div class="highlight"><pre><span></span>$ python3 train.py --epochs <span class="m">5</span> --batch_size <span class="m">64</span> --vocab_size <span class="m">20000</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 train.py --epochs <span class="m">5</span> --batch_size <span class="m">64</span> --vocab_size <span class="m">20000</span> --hidden_size <span class="m">100</span>
 
-Using TensorFlow backend.
-Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle
-<span class="m">55181312</span>/55180071 <span class="o">[==============================]</span> - 11s 0us/step
-Downloading data from https://dl.dropbox.com/s/kg09i1z32n12o98/twus_dev.pickle
-<span class="m">57229312</span>/57227360 <span class="o">[==============================]</span> - 12s 0us/step
-Downloading data from https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle
-<span class="m">2427592704</span>/2427591168 <span class="o">[==============================]</span> - 486s 0us/step
+<span class="go">Using TensorFlow backend.</span>
+<span class="go">Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle</span>
+<span class="go">55181312/55180071 [==============================] - 11s 0us/step</span>
+<span class="go">Downloading data from https://dl.dropbox.com/s/kg09i1z32n12o98/twus_dev.pickle</span>
+<span class="go">57229312/57227360 [==============================] - 12s 0us/step</span>
+<span class="go">Downloading data from https://dl.dropbox.com/s/0d4l6jmgguzonou/twus_train.pickle</span>
+<span class="go">2427592704/2427591168 [==============================] - 486s 0us/step</span>
 
-Building model...
-Hidden layer size: <span class="m">100</span>
-Analyzing up to <span class="m">500</span> words <span class="k">for</span> each sample.
-Building tweet Tokenizer using a <span class="m">20</span>,000 word vocabulary. This may take a <span class="k">while</span>...
-Tokenizing <span class="m">419</span>,869 tweets. This may take a <span class="k">while</span>...
-Training model...
-Train on <span class="m">410336</span> samples, validate on <span class="m">9533</span> samples
-Epoch <span class="m">1</span>/5
-  <span class="m">4608</span>/410336 <span class="o">[</span>..............................<span class="o">]</span> - ETA: <span class="m">39</span>:11 - loss: <span class="m">3</span>.7145 - acc: <span class="m">0</span>.0911 - top_5_acc: <span class="m">0</span>.3092
+<span class="go">Building model...</span>
+<span class="go">Hidden layer size: 100</span>
+<span class="go">Analyzing up to 500 words for each sample.</span>
+<span class="go">Building tweet Tokenizer using a 20,000 word vocabulary. This may take a while...</span>
+<span class="go">Tokenizing 419,869 tweets. This may take a while...</span>
+<span class="go">Training model...</span>
+<span class="go">Train on 410336 samples, validate on 9533 samples</span>
+<span class="go">Epoch 1/5</span>
+<span class="go">  4608/410336 [..............................] - ETA: 39:11 - loss: 3.7145 - acc: 0.0911 - top_5_acc: 0.3092</span>
 </pre></div>
 </div>
 <p>You can also try using this data from your own source code.</p>
@@ -281,23 +281,30 @@ Epoch <span class="m">1</span>/5
 <span class="c1"># num_outputs is the total number of possible classes (locations). In this example, 50 US states plus 3 territories.</span>
 <span class="c1"># time_steps is the total number of individual words to consider for each user.</span>
 <span class="c1"># Some users have more tweets then others. In this example, we are capping it at a total of 500 words per user.</span>
-<span class="n">geoModel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">num_outputs</span><span class="o">=</span><span class="mi">53</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
-                 <span class="n">vocab_size</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+<span class="n">geoModel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+<span class="n">geoModel</span><span class="o">.</span><span class="n">build_model</span><span class="p">(</span><span class="n">num_outputs</span><span class="o">=</span><span class="mi">53</span><span class="p">,</span> <span class="n">time_steps</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span><span class="n">vocab_size</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
 
 <span class="n">geoModel</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-<span class="n">geoModel</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;mymodel.h5&#39;</span><span class="p">)</span>
+<span class="n">geoModel</span><span class="o">.</span><span class="n">save_model</span><span class="p">(</span><span class="s1">&#39;mymodel&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="making-predictions">
 <h2>Making Predictions<a class="headerlink" href="#making-predictions" title="Permalink to this headline">¶</a></h2>
-<div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">twgeo.models.geomodel</span> <span class="k">import</span> <span class="n">Model</span>
-<span class="kn">from</span> <span class="nn">twgeo.data</span> <span class="k">import</span> <span class="n">twus</span>
+<div class="code ipython highlight-default"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">twgeo.models.geomodel</span> <span class="k">import</span> <span class="n">Model</span>
+<span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
 
-<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">twgeo.data</span> <span class="k">import</span> <span class="n">twus_dataset</span> <span class="k">as</span> <span class="n">twus</span>
 
-<span class="n">geoModel</span><span class="o">.</span><span class="n">load_saved_model</span><span class="p">(</span><span class="s1">&#39;mymodel.h5&#39;</span><span class="p">)</span>
-<span class="n">results</span> <span class="o">=</span> <span class="n">geoModel</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">geoModel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">geoModel</span><span class="o">.</span><span class="n">load_saved_model</span><span class="p">(</span><span class="s1">&#39;mymodel&#39;</span><span class="p">)</span>
+<span class="n">Loading</span> <span class="n">saved</span> <span class="n">model</span><span class="o">...</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">geoModel</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span> <span class="s1">&#39;KY&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="toctree-wrapper compound">

@@ -38,42 +38,54 @@ _TWITTER_CSV_DEV_DATA_DROPBOX = "https://dl.dropbox.com/s/8drqqugn5fw7zbx/twus_d
 _TWITTER_CSV_DEV_DATA_MD5 = "4e60b193ae5f4232c80d6e5f27b8c94e"
 
 
-def load_state_data():
+def load_state_data(size='large'):
     """
     Training samples labeled with the corresponding US State.
 
+    :param: size: 'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
     :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
     """
     train_df, dev_df, test_df = _load_data()
 
+    if size == 'small':
+        train_df = train_df.head(50000)
+    elif size == 'mid':
+        train_df = train_df.head(100000)
+
     x_train = train_df['tweets'].values
-    y_train = train_df['state'].values
+    y_train = train_df['state_name'].values
 
     x_dev = dev_df['tweets'].values
-    y_dev = dev_df['state'].values
+    y_dev = dev_df['state_name'].values
 
     x_test = test_df['tweets'].values
-    y_test = test_df['state'].values
+    y_test = test_df['state_name'].values
 
     return x_train, y_train, x_dev, y_dev, x_test, y_test
 
 
-def load_region_data():
+def load_region_data(size='large'):
     """
     Training samples labeled with the corresponding US Census Region.
 
+    :param: size: 'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
     :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
     """
     train_df, dev_df, test_df = _load_data()
 
+    if size == 'small':
+        train_df = train_df.head(50000)
+    elif size == 'mid':
+        train_df = train_df.head(100000)
+
     x_train = train_df['tweets'].values
-    y_train = train_df['region'].values
+    y_train = train_df['region_name'].values
 
     x_dev = dev_df['tweets'].values
-    y_dev = dev_df['region'].values
+    y_dev = dev_df['region_name'].values
 
     x_test = test_df['tweets'].values
-    y_test = test_df['region'].values
+    y_test = test_df['region_name'].values
 
     return x_train, y_train, x_dev, y_dev, x_test, y_test
 
