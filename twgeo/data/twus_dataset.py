@@ -42,12 +42,15 @@ def load_state_data(size='large'):
     """
     Training samples labeled with the corresponding US State.
 
-    :param: size: 'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
+    :param: size: 'micro': 10,000 samples
+            'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
     :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
     """
     train_df, dev_df, test_df = _load_data()
 
-    if size == 'small':
+    if size == 'micro':
+        train_df = train_df.head(10000)
+    elif size == 'small':
         train_df = train_df.head(50000)
     elif size == 'mid':
         train_df = train_df.head(100000)
@@ -68,12 +71,15 @@ def load_region_data(size='large'):
     """
     Training samples labeled with the corresponding US Census Region.
 
-    :param: size: 'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
+    :param: size: 'micro': 10,000 samples
+            'small': 50,000 samples, 'mid': 100,000 samples, 'large': 410,000 samples.
     :return: Tuple(x_train, y_train, x_dev, y_dev, x_test, y_test)
     """
     train_df, dev_df, test_df = _load_data()
 
-    if size == 'small':
+    if size == 'micro':
+        train_df = train_df.head(10000)
+    elif size == 'small':
         train_df = train_df.head(50000)
     elif size == 'mid':
         train_df = train_df.head(100000)

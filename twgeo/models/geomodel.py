@@ -90,7 +90,7 @@ class Model:
         y_dev = self._label_encoder.transform(y_dev)
 
         if self._tokenizer is None: self._create_tokenizer(x_train)
-        print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
+        print("Tokenizing tweets from {0:,} users. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
 
