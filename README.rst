@@ -30,6 +30,19 @@ fully-connected layer at the end yields the classification result.
 Getting Started
 ---------------
 
+Dependencies
+~~~~~~~~~~~~
+1. Python 3.5
+2. tensorflow
+3. keras
+4. nltk
+5. pandas
+6. numpy
+7. sqlalchemy
+8. sklearn
+9. psycopg2
+
+
 Installation
 ~~~~~~~~~~~~
 
@@ -37,6 +50,8 @@ Clone the repository and install all the dependencies using pip.
 
 .. code:: console
 
+    $ git clone git@github.com:jmatias/uiuc-twitter-geolocation.git
+    $ cd uiuc-twitter-geolocation
     $ sudo pip3 install -r requirements.txt
 
 This will install the latest CPU version of Tensorflow. If you would
