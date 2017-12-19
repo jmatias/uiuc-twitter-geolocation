@@ -65,6 +65,8 @@ The tool comes with a built-in dataset of ~430K users located in the
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.
 
+Note: The dataset has a size of approximately 2.5GB.
+
 .. code-block:: console
 
     $ python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000 --hidden_size 100
@@ -91,16 +93,24 @@ You can also try using this data from your own source code.
 
 .. code-block:: ipython
 
-    In [1]: from data import twus
+    In [1]: from twgeo.data import twus_dataset
     Using TensorFlow backend.
 
-    In [2]: x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    In [2]: x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data()
 
     In [3]: x_train.shape
     Out[3]: (410336,)
 
     In [4]: y_train.shape
     Out[4]: (410336,)
+
+    In [5]: x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data(size='small')
+
+    In [6]: x_train.shape
+    Out[6]: (50000,)
+
+    In [7]: y_train.shape
+    Out[7]: (50000,)
 
 
 Pre-Processing your own data
@@ -142,7 +152,7 @@ Training the Model
     
     # x_train is an array of text. Each element contains all the tweets for a given user. 
     # y_train is an array of integer values, corresponding to each particular location we want to train against.
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data()
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus.load_state_data(size='small')
 
     # num_outputs is the total number of possible classes (locations). In this example, 50 US states plus 3 territories.
     # time_steps is the total number of individual words to consider for each user.
@@ -172,5 +182,21 @@ Making Predictions
 
     In [6]: geoModel.predict(x_test)
     Out[6]: array(['CA', 'FL', 'NY', ..., 'TX', 'MA', 'KY'], dtype=object)
+
+
+Results
+------------------
+
+The built-in TWUS dataset was used to train US State and US Census Region classifiers. Using a hidden layer size of
+300 neurons, timestep window of 500 words and a vocabulary size of 50,000 words, the model achieves the following results.
+
++-------------------------+-------------------+-----------------------+
+| Classification Task     | Test Set Accuracy | Test Set Accuracy @ 5 |
++=========================+===================+=======================+
+| US Census Region        | 73.95%            |  N/A                  |
++-------------------------+-------------------+-----------------------+
+| US State                | 51.44%            |  75.39%               |
++-------------------------+-------------------+-----------------------+
+
 
 

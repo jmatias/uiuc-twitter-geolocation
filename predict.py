@@ -1,4 +1,6 @@
 
+from __future__ import print_function
+
 from os import path, environ
 
 if __name__ == '__main__':
@@ -7,13 +9,13 @@ if __name__ == '__main__':
     from twgeo.models.geomodel import Model
     from twgeo.data import twus_dataset, constants
 
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data()
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_region_data()
 
-    geoModel = Model()
+    geoModel = Model(batch_size=650)
 
-    geoModel.load_saved_model(path.join(constants.DATACACHE_DIR, 'geomodel_state'))
-    lol = geoModel.predict(x_test)
-    lol2 = geoModel.evaluate(x_test, y_test)
-    print(lol2)
+    geoModel.load_saved_model(path.join(constants.DATACACHE_DIR, 'geomodel_region'))
+    predictions = geoModel.predict(x_test)
+    evaluation = geoModel.evaluate(x_test, y_test)
+    print(evaluation)
+    print(predictions)
 
-    print("Hello")

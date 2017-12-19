@@ -85,11 +85,11 @@ class Model:
             raise ValueError("x_dev and y_dev must have the same number of samples.", x_dev.shape[0],
                              y_dev.shape[0])
 
-        self._create_label_encoder(y_train)
+        if self._label_encoder is None: self._create_label_encoder(y_train)
         y_train = self._label_encoder.transform(y_train)
         y_dev = self._label_encoder.transform(y_dev)
 
-        self._create_tokenizer(x_train, force=reset_model)
+        if self._tokenizer is None: self._create_tokenizer(x_train)
         print("Tokenizing {0:,} tweets. This may take a while...".format(x_train.shape[0] + x_dev.shape[0]))
         x_dev = self._tokenize_texts(x_dev)
         x_train = self._tokenize_texts(x_train)
@@ -128,7 +128,7 @@ class Model:
         :param y_test: Evaluation labels.
         :return: A dictionary of metric, value pairs.
         """
-        # self._load_tokenizer()
+
         x_test = self._tokenize_texts(x_test)
 
         y_test = self._label_encoder.transform(y_test)
@@ -207,7 +207,7 @@ class Model:
                                                            write_images=True)
         return [tensorboard_callback]
 
-    def _create_tokenizer(self, x_train, force=True):
+    def _create_tokenizer(self, x_train):
         print("Building tweet Tokenizer using a {0:,} word vocabulary. This may take a while...".format(
             self._vocab_size))
         self._tokenizer = Tokenizer(num_words=self._vocab_size, lower=True,

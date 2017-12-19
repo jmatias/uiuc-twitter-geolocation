@@ -179,10 +179,26 @@ fully-connected layer at the end yields the classification result.</p>
 </div>
 <div class="section" id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dependencies">
+<h3>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Python 3.5</li>
+<li>tensorflow</li>
+<li>keras</li>
+<li>nltk</li>
+<li>pandas</li>
+<li>numpy</li>
+<li>sqlalchemy</li>
+<li>sklearn</li>
+<li>psycopg2</li>
+</ol>
+</div>
 <div class="section" id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h3>
 <p>Clone the repository and install all the dependencies using pip.</p>
-<div class="code console highlight-default"><div class="highlight"><pre><span></span>$ sudo pip3 install -r requirements.txt
+<div class="code console highlight-default"><div class="highlight"><pre><span></span>$ git clone git@github.com:jmatias/uiuc-twitter-geolocation.git
+$ cd uiuc-twitter-geolocation
+$ sudo pip3 install -r requirements.txt
 </pre></div>
 </div>
 <p>This will install the latest CPU version of Tensorflow. If you would
@@ -194,6 +210,7 @@ instructions</a>.</p>
 <p>The tool comes with a built-in dataset of ~430K users located in the
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.</p>
+<p>Note: The dataset has a size of approximately 2.5GB.</p>
 <div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 train.py --epochs <span class="m">5</span> --batch_size <span class="m">64</span> --vocab_size <span class="m">20000</span> --hidden_size <span class="m">100</span>
 
 <span class="go">Using TensorFlow backend.</span>
@@ -216,16 +233,24 @@ train a model using this dataset, run the train.py sample script.</p>
 </pre></div>
 </div>
 <p>You can also try using this data from your own source code.</p>
-<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">data</span> <span class="kn">import</span> <span class="n">twus</span>
+<div class="highlight-ipython"><div class="highlight"><pre><span></span><span class="n">In</span> <span class="p">[</span><span class="mi">1</span><span class="p">]:</span> <span class="kn">from</span> <span class="nn">twgeo.data</span> <span class="kn">import</span> <span class="n">twus_dataset</span>
 <span class="n">Using</span> <span class="n">TensorFlow</span> <span class="n">backend</span><span class="o">.</span>
 
-<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+<span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">]:</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus_dataset</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span> <span class="p">(</span><span class="mi">410336</span><span class="p">,)</span>
 
 <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span>
 <span class="n">Out</span><span class="p">[</span><span class="mi">4</span><span class="p">]:</span> <span class="p">(</span><span class="mi">410336</span><span class="p">,)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">]:</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus_dataset</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="p">(</span><span class="mi">50000</span><span class="p">,)</span>
+
+<span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="n">y_train</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">Out</span><span class="p">[</span><span class="mi">7</span><span class="p">]:</span> <span class="p">(</span><span class="mi">50000</span><span class="p">,)</span>
 </pre></div>
 </div>
 </div>
@@ -276,7 +301,7 @@ train a model using this dataset, run the train.py sample script.</p>
 
 <span class="c1"># x_train is an array of text. Each element contains all the tweets for a given user.</span>
 <span class="c1"># y_train is an array of integer values, corresponding to each particular location we want to train against.</span>
-<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">()</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_dev</span><span class="p">,</span> <span class="n">y_dev</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">twus</span><span class="o">.</span><span class="n">load_state_data</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
 
 <span class="c1"># num_outputs is the total number of possible classes (locations). In this example, 50 US states plus 3 territories.</span>
 <span class="c1"># time_steps is the total number of individual words to consider for each user.</span>
@@ -307,6 +332,34 @@ train a model using this dataset, run the train.py sample script.</p>
 <span class="n">Out</span><span class="p">[</span><span class="mi">6</span><span class="p">]:</span> <span class="n">array</span><span class="p">([</span><span class="s1">&#39;CA&#39;</span><span class="p">,</span> <span class="s1">&#39;FL&#39;</span><span class="p">,</span> <span class="s1">&#39;NY&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="s1">&#39;TX&#39;</span><span class="p">,</span> <span class="s1">&#39;MA&#39;</span><span class="p">,</span> <span class="s1">&#39;KY&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
 </pre></div>
 </div>
+</div>
+<div class="section" id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h2>
+<p>The built-in TWUS dataset was used to train US State and US Census Region classifiers. Using a hidden layer size of
+300 neurons, timestep window of 500 words and a vocabulary size of 50,000 words, the model achieves the following results.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="37%" />
+<col width="28%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Classification Task</th>
+<th class="head">Test Set Accuracy</th>
+<th class="head">Test Set Accuracy &#64; 5</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>US Census Region</td>
+<td>73.95%</td>
+<td>N/A</td>
+</tr>
+<tr class="row-odd"><td>US State</td>
+<td>51.44%</td>
+<td>75.39%</td>
+</tr>
+</tbody>
+</table>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">API</span></p>
 <ul>

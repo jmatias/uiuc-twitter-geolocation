@@ -18,7 +18,7 @@ if __name__ == '__main__':
     from twgeo.data import twus_dataset, constants
     from twgeo.models.geomodel import Model
 
-    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data(size='small')
+    x_train, y_train, x_dev, y_dev, x_test, y_test = twus_dataset.load_state_data()
 
     geoModel = Model(batch_size=args.batch_size, use_tensorboard=args.tensorboard)
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
                          hidden_layer_size=args.hidden_size)
 
     geomodel_state_model_file = path.join(constants.DATACACHE_DIR, 'geomodel_state')
-    if path.exists(geomodel_state_model_file):
+    if path.exists(geomodel_state_model_file + ".h5"):
         print("Loading existing model at {0}".format(geomodel_state_model_file))
         geoModel.load_saved_model(geomodel_state_model_file)
 
