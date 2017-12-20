@@ -69,7 +69,7 @@ Note: The dataset has a size of approximately 2.5GB.
 
 .. code-block:: console
 
-    $ python3 train.py --epochs 5 --batch_size 64 --vocab_size 20000 --hidden_size 100
+    $ python3 train.py --epochs 5 --batch_size 32 --vocab_size 20000 --hidden_size 100 --max_words 100 --classifier state
 
     Using TensorFlow backend.
     Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle
@@ -81,13 +81,13 @@ Note: The dataset has a size of approximately 2.5GB.
 
     Building model...
     Hidden layer size: 100
-    Analyzing up to 500 words for each sample.
+    Analyzing up to 100 words for each sample.
     Building tweet Tokenizer using a 20,000 word vocabulary. This may take a while...
-    Tokenizing 419,869 tweets. This may take a while...
+    Tokenizing tweets from 59,546 users. This may take a while...
     Training model...
-    Train on 410336 samples, validate on 9533 samples
-    Epoch 1/5
-      4608/410336 [..............................] - ETA: 39:11 - loss: 3.7145 - acc: 0.0911 - top_5_acc: 0.3092
+    Train on 50000 samples, validate on 9546 samples
+    Epoch 1/1
+        1664/50000 [..............................] - ETA: 3:59 - loss: 3.8578 - acc: 0.0950 - top_5_acc: 0.2536
 
 You can also try using this data from your own source code.
 

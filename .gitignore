@@ -65,3 +65,6 @@ fabric.properties
 /docs-src/static/
 throwaway.py
 /twus_dev.csv
+.idea/vcs.xml
+.idea/modules.xml
+.idea/inspectionProfiles/Project_Default.xml

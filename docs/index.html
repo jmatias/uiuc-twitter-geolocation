@@ -211,7 +211,7 @@ instructions</a>.</p>
 U.S. (~410K for training, ~10K for development and ~10K for testing). To
 train a model using this dataset, run the train.py sample script.</p>
 <p>Note: The dataset has a size of approximately 2.5GB.</p>
-<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 train.py --epochs <span class="m">5</span> --batch_size <span class="m">64</span> --vocab_size <span class="m">20000</span> --hidden_size <span class="m">100</span>
+<div class="highlight-console"><div class="highlight"><pre><span></span><span class="gp">$</span> python3 train.py --epochs <span class="m">5</span> --batch_size <span class="m">32</span> --vocab_size <span class="m">20000</span> --hidden_size <span class="m">100</span> --max_words <span class="m">100</span> --classifier state
 
 <span class="go">Using TensorFlow backend.</span>
 <span class="go">Downloading data from https://dl.dropbox.com/s/ze4ov5j30u9rf5m/twus_test.pickle</span>
@@ -223,13 +223,13 @@ train a model using this dataset, run the train.py sample script.</p>
 
 <span class="go">Building model...</span>
 <span class="go">Hidden layer size: 100</span>
-<span class="go">Analyzing up to 500 words for each sample.</span>
+<span class="go">Analyzing up to 100 words for each sample.</span>
 <span class="go">Building tweet Tokenizer using a 20,000 word vocabulary. This may take a while...</span>
-<span class="go">Tokenizing 419,869 tweets. This may take a while...</span>
+<span class="go">Tokenizing tweets from 59,546 users. This may take a while...</span>
 <span class="go">Training model...</span>
-<span class="go">Train on 410336 samples, validate on 9533 samples</span>
-<span class="go">Epoch 1/5</span>
-<span class="go">  4608/410336 [..............................] - ETA: 39:11 - loss: 3.7145 - acc: 0.0911 - top_5_acc: 0.3092</span>
+<span class="go">Train on 50000 samples, validate on 9546 samples</span>
+<span class="go">Epoch 1/1</span>
+<span class="go">    1664/50000 [..............................] - ETA: 3:59 - loss: 3.8578 - acc: 0.0950 - top_5_acc: 0.2536</span>
 </pre></div>
 </div>
 <p>You can also try using this data from your own source code.</p>
